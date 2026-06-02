@@ -1,5 +1,5 @@
 # 三面数据 - 2026-06-02（操作日）
-> 数据采集时间：2026-06-02 19:50（已收盘）
+> 数据采集时间：2026-06-02 22:38（已收盘）
 
 ## 资金面
 
@@ -170,26 +170,26 @@
 
 | 时间 | 快讯 |
 |------|------|
-| 19:47:04 | A股IPO月报|承销格局从“三中一华”变成“三国杀” 甬兴证券连撤两单储备数量归0 |
-| 18:30:47 | AI乐观情绪对冲中东地缘忧虑，全球股市反弹 |
-| 18:27:33 | 意法半导体CEO：受AI光器件需求攀升提振，公司拟评估扩建克罗勒晶圆厂 |
-| 18:26:18 | 前备厢养鱼、车载马桶及沐浴器……车圈陷盲目堆料怪圈 |
-| 18:25:59 | 牛津能源研究所预测：地缘冲突恐致年内波斯湾石油供应损失超20亿桶 |
-| 18:22:59 | 花旗集团警告美国科技股多头仓位过度拥挤 纳斯达克100指数面临回调风险 |
-| 18:09:27 | AI独自扛起标普500上涨行情 |
-| 18:09:15 | 中天期货:原油冲高回落 白银继续震荡 |
-| 17:59:40 | 意法半导体计划扩建法国克勒索工厂 以应对人工智能数据中心硅光子技术需求爆发 |
-| 17:58:27 | 美方以不公平贸易行为为由，拟对巴西商品征收25%关税 |
-| 17:55:44 | 山西煤矿整顿对炼焦精煤供应的影响知多少 |
-| 17:54:41 | 英伟达CEO黄仁勋：随着AI硬件需求飙升，Marvell或将加入万亿美元市值俱乐部 |
-| 17:54:11 | 中天策略:6月2日市场分析 |
-| 17:53:42 | 【建投白糖调研】蔗野寻踪：广西5月苗情调研报告 |
-| 17:50:27 | 欧央行报告显示：欧元的全球地位略有提升 但仍难望美元项背 |
-| 17:50:15 | 黑石完成规模超130亿美元亚洲私募股权基金募资，创下区域募资新高 |
-| 17:48:18 | 伯纳姆：如果接替斯塔默成为英国首相 不会提前举行大选 |
-| 17:47:18 | 股东交售股票数量据悉已可使裕信银行对德国商业银行持股比例远超30% |
-| 17:45:26 | 光大期货0602热点追踪：山西安监升级 焦煤还能追涨吗 |
-| 17:44:46 | SEC、马斯克为推特持仓案的和解协议辩护 回应法官的质疑 |
+| 22:36:39 | 利好过多，市场会不会物极必反？ |
+| 22:34:53 | Jaguar Uranium在Huemul项目发现地表铀铜钒矿化 化验结果待公布 |
+| 22:32:51 | I-ON Digital签署具有约束力的收购协议 战略性扩大美国金矿权益组合 |
+| 22:31:45 | QXO启动30亿美元优先票据发行 为收购TopBuild融资 |
+| 22:30:58 | Marcus Corporation首席信息官Kim M. Lueck将于8月退休 |
+| 22:28:46 | Coforge推出Nexa Agentic AI平台 推动保险运营智能化升级 |
+| 22:26:51 | WEX获福布斯2026年美国最佳企业文化雇主认可 |
+| 22:25:21 | SICK公司推出首款搭载Aeva FMCW技术工业传感器 |
+| 22:24:05 | Monro将出席Oppenheimer第26届消费者增长与电商大会 |
+| 22:22:23 | 穆迪将于6月8日举办生成式AI战略问答会 详解AI布局与进展 |
+| 22:21:35 | Real Brokerage进军新不伦瑞克省 加拿大业务扩展至第六省 |
+| 22:20:50 | Vince定于6月16日发布2026财年第一季度业绩 |
+| 22:18:33 | Arrowhead将出席两场医疗大会 多项关键数据即将读出 |
+| 22:17:37 | 康宝莱CFO将出席东海岸IDEAS会议 解读战略转型进展 |
+| 22:15:57 | NIQ推出Product Intelligence 助力AI驱动商务 |
+| 22:15:17 | 黑石完成旗下最大亚洲私募股权基金募资，规模超130亿美元 |
+| 22:15:05 | Beachbody将出席Noble Capital Markets新兴成长虚拟会议 |
+| 22:13:30 | 黄仁勋称Marvell有望成为下一家万亿美元公司，股价飙升20% |
+| 22:12:20 | PPG发布白皮书 静电喷涂技术助力航运业降本减碳 |
+| 22:11:31 | Anthropic将Mythos模型扩展至15个国家的150家新增机构 |
 
 ### 盘面概述
 > **市场情绪**：中性
@@ -199,7 +199,7 @@
 
 <!--JSON_OUTPUT-->
 {
-  "collect_time": "2026-06-02 19:50",
+  "collect_time": "2026-06-02 22:38",
   "indices": [
     {
       "name": "上证指数",
@@ -2117,124 +2117,124 @@
   ],
   "news_flash": [
     {
-      "time": "19:47:04",
-      "title": "A股IPO月报|承销格局从“三中一华”变成“三国杀” 甬兴证券连撤两单储备数量归0",
-      "summary": "出品：新浪财经上市公司研究院 作者：IPO再融资组/图灵 2026年5月，A股IPO市场有19家公司首发上会，18家过会，名义过会率94.74%。",
-      "url": "https://finance.sina.com.cn/stock/observe/2026-06-02/doc-inhzzqcm1501488.shtml"
+      "time": "22:36:39",
+      "title": "利好过多，市场会不会物极必反？",
+      "summary": "当前市场正来到关键临界点：此前源源不断推动股指上行的多重利好，有可能走向利好透支、物极必反。 本文讨论的并非股指上涨速率 —— 譬如标普 500 自 3 月 30 日低点反弹近...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumh2966521.shtml"
     },
     {
-      "time": "18:30:47",
-      "title": "AI乐观情绪对冲中东地缘忧虑，全球股市反弹",
-      "summary": "受人工智能板块利好提振，全球股市周二全线走高：AI 企业 Anthropic 启动赴美上市进程点燃行业做多热情；与此同时，市场对美伊达成和谈的预期升温，国际原油...",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivs1581583.shtml"
+      "time": "22:34:53",
+      "title": "Jaguar Uranium在Huemul项目发现地表铀铜钒矿化 化验结果待公布",
+      "summary": "Jaguar Uranium Corp． 周二宣布，已成功完成其在阿根廷门多萨省马拉圭地区Huemul铀铜钒项目的200个岩石样品采样计划，并在现场发现了肉眼可见的铀、铜和钒矿化现象。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4646013.shtml"
     },
     {
-      "time": "18:27:33",
-      "title": "意法半导体CEO：受AI光器件需求攀升提振，公司拟评估扩建克罗勒晶圆厂",
-      "summary": " 意法半导体首席执行官周二表示，受益于 AI 数据中心所用硅光芯片需求快速走高，公司有望在 2026 年底敲定法国克罗勒（Crolles）晶圆厂的新一轮扩建方案。",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivp1600797.shtml"
+      "time": "22:32:51",
+      "title": "I-ON Digital签署具有约束力的收购协议 战略性扩大美国金矿权益组合",
+      "summary": "I-ON Digital Corp．周二宣布，已签署具有约束力的收购协议，收购位于美国西南部的20个BLM（土地管理局）金矿开采权的权益。该交易已获董事会批准，将以现金、卖方融资...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumn1422485.shtml"
     },
     {
-      "time": "18:26:18",
-      "title": "前备厢养鱼、车载马桶及沐浴器……车圈陷盲目堆料怪圈",
-      "summary": "“新车越来越大、越来越重”正成为市场关注的焦点。这一现象背后，是汽车行业正在陷入盲目堆砌配置的内卷怪圈。 在车内可以吃火锅、品茶，在前备厢里可以养鱼...",
-      "url": "https://finance.sina.com.cn/jjxw/2026-06-02/doc-inhzzivq4804208.shtml"
+      "time": "22:31:45",
+      "title": "QXO启动30亿美元优先票据发行 为收购TopBuild融资",
+      "summary": "QXO， Inc．周二宣布，其全资子公司QXO Building Products， Inc．计划发行30亿美元优先票据，以协助为收购TopBuild Corp．提供融资。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumn1422127.shtml"
     },
     {
-      "time": "18:25:59",
-      "title": "牛津能源研究所预测：地缘冲突恐致年内波斯湾石油供应损失超20亿桶",
-      "summary": "英国知名智库牛津能源研究所（OIES）日前发布预测报告指出，受近期中东地区地缘政治冲突持续升级影响，波斯湾地区的石油供应面临严重冲击，预计到今年年底...",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivn3132808.shtml"
+      "time": "22:30:58",
+      "title": "Marcus Corporation首席信息官Kim M. Lueck将于8月退休",
+      "summary": "Marcus Corporation周二宣布，公司首席信息官兼Marcus Theatres首席信息技术官Kim M． Lueck将于2026年8月1日正式退休，结束其近30年的职业生涯。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4644701.shtml"
     },
     {
-      "time": "18:22:59",
-      "title": "花旗集团警告美国科技股多头仓位过度拥挤 纳斯达克100指数面临回调风险",
-      "summary": "美股科技股持续飙升引发华尔街投行高度警惕。花旗集团策略师团队日前发布报告警告称，当前美国科技股市场中的多头仓位已呈现极端过度拥挤状态...",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivs1578365.shtml"
+      "time": "22:28:46",
+      "title": "Coforge推出Nexa Agentic AI平台 推动保险运营智能化升级",
+      "summary": "Coforge Limited周二正式发布Nexa Agentic AI平台，这是一款面向全球保险行业的下一代智能业务平台，旨在帮助保险公司在不替换现有核心系统的前提下，规模化部署AI能力...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumi1431546.shtml"
     },
     {
-      "time": "18:09:27",
-      "title": "AI独自扛起标普500上涨行情",
-      "summary": "倘若剔除 AI 产业链相关个股，标普 500 指数本轮反弹成色将大打折扣。 标普 500 本轮上涨并非全市场普涨。高盛编制的剔除 AI 受益股指数自 2 月末以来小幅收跌...",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivn3123616.shtml"
+      "time": "22:26:51",
+      "title": "WEX获福布斯2026年美国最佳企业文化雇主认可",
+      "summary": " WEX Inc．周二宣布，公司被《福布斯》评为2026年度美国最佳企业文化雇主之一。这一荣誉彰显了WEX在工作场所文化建设和员工体验方面的持续投入。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumh2963658.shtml"
     },
     {
-      "time": "18:09:15",
-      "title": "中天期货:原油冲高回落 白银继续震荡",
-      "summary": "热点品种分析 一、商品指数 二、股指 中国上证综指6月2日（周二）收盘上涨17.36点，涨幅0.43%，报4075.10点； 中国深证成指6月2日（周二）收盘上涨250.77点，涨幅1.63%...",
-      "url": "https://finance.sina.com.cn/money/future/fmnews/2026-06-02/doc-inhzzivn3123544.shtml"
+      "time": "22:25:21",
+      "title": "SICK公司推出首款搭载Aeva FMCW技术工业传感器",
+      "summary": "工业传感器解决方案提供商SICK宣布，已在其工业传感产品线中正式引入Aeva的调频连续波（FMCW）技术，并推出首款搭载该技术的新型传感器。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumh2963215.shtml"
     },
     {
-      "time": "17:59:40",
-      "title": "意法半导体计划扩建法国克勒索工厂 以应对人工智能数据中心硅光子技术需求爆发",
-      "summary": "半导体巨头意法半导体（STMicroelectronics）首席执行官让-马克·奇瑞（Jean-Marc Chery）2日在这里表示，受益于人工智能（AI）数据中心对硅光子技术需求的爆发式增长...",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivn3119634.shtml"
+      "time": "22:24:05",
+      "title": "Monro将出席Oppenheimer第26届消费者增长与电商大会",
+      "summary": "Monro， Inc．宣布，公司总裁兼首席执行官Peter Fitzsimmons、执行副总裁兼首席财务官Brian D‘Ambrosia以及投资者关系副总裁Felix...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumn1420068.shtml"
     },
     {
-      "time": "17:58:27",
-      "title": "美方以不公平贸易行为为由，拟对巴西商品征收25%关税",
-      "summary": "该提案是本届政府依托 301 条款调查重塑关税政策的最新举措3 月停靠巴西巴拉那瓜港的大型散货船 特朗普政府周一提议对巴西大量进口商品征收 25% 关税。",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivq4787939.shtml"
+      "time": "22:22:23",
+      "title": "穆迪将于6月8日举办生成式AI战略问答会 详解AI布局与进展",
+      "summary": " 穆迪公司宣布，将于6月8日举办一场聚焦生成式AI战略的专题问答会，届时公司高管将向投资者和分析师详细介绍其在AI领域的最新战略布局与业务进展。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumi1429752.shtml"
     },
     {
-      "time": "17:55:44",
-      "title": "山西煤矿整顿对炼焦精煤供应的影响知多少",
-      "summary": "来源：煤炭资源网 5月下旬山西长治发生的煤矿事故导致该省炼焦煤产区迎来了普遍的停产整顿，导致炼焦煤价格出现快速上涨。诚然市场反应不排除情绪的影响...",
-      "url": "https://finance.sina.com.cn/money/future/2026-06-02/doc-inhzzivp1586294.shtml"
+      "time": "22:21:35",
+      "title": "Real Brokerage进军新不伦瑞克省 加拿大业务扩展至第六省",
+      "summary": "Real Brokerage Inc． 周二宣布已正式进军加拿大新不伦瑞克省，这是该公司在加拿大扩展至的第六个省份，进一步巩固了其在加拿大房地产市场的布局。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4642027.shtml"
     },
     {
-      "time": "17:54:41",
-      "title": "英伟达CEO黄仁勋：随着AI硬件需求飙升，Marvell或将加入万亿美元市值俱乐部",
-      "summary": "英伟达首席执行官黄仁勋表示，Marvell Technology可能成为下一家进入万亿美元市值俱乐部的芯片公司。他预测，自主模型的出现将推动AI硬件需求激增。",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivp1585226.shtml"
+      "time": "22:20:50",
+      "title": "Vince定于6月16日发布2026财年第一季度业绩",
+      "summary": " Vince Holding Corp．宣布，将于6月16日（周二）盘前发布2026财年第一季度财务报告，并于当日早间举行电话会议。届时管理层将对经营状况和增长战略进行说明。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4641770.shtml"
     },
     {
-      "time": "17:54:11",
-      "title": "中天策略:6月2日市场分析",
-      "summary": "",
-      "url": "https://finance.sina.com.cn/money/future/fmnews/2026-06-02/doc-inhzzivn3117591.shtml"
+      "time": "22:18:33",
+      "title": "Arrowhead将出席两场医疗大会 多项关键数据即将读出",
+      "summary": " Arrowhead Pharmaceuticals周二宣布，公司将参加6月举行的两场重要医疗健康会议，并在会上进行炉边谈话。届时管理层将分享公司在RNA干扰疗法领域的最新进展。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4641126.shtml"
     },
     {
-      "time": "17:53:42",
-      "title": "【建投白糖调研】蔗野寻踪：广西5月苗情调研报告",
-      "summary": "CFC商品策略研究 研究员|中信建投期货研究发展部陈家谊 研究助理|中信建投期货研究发展部谢明妍 摘要 2026年5月25日至29日，我们走访广西柳州、来宾、南宁...",
-      "url": "https://finance.sina.com.cn/money/future/fmnews/2026-06-02/doc-inhzzivn3118100.shtml"
+      "time": "22:17:37",
+      "title": "康宝莱CFO将出席东海岸IDEAS会议 解读战略转型进展",
+      "summary": "康宝莱公司周二宣布，首席财务官John DeSimone将于6月11日出席在东海岸举行的IDEAS会议并发表演讲。此次亮相正值这家营养品巨头完成多项战略布局...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4640861.shtml"
     },
     {
-      "time": "17:50:27",
-      "title": "欧央行报告显示：欧元的全球地位略有提升 但仍难望美元项背",
-      "summary": "2025年欧元在国际上的使用略有增长，但仍远不及美元，这凸显了在全球范围内挑战美元霸主地位的难度。 欧洲央行周二发布的年度评估报告显示...",
-      "url": "https://finance.sina.com.cn/world/2026-06-02/doc-inhzzivq4783616.shtml"
+      "time": "22:15:57",
+      "title": "NIQ推出Product Intelligence 助力AI驱动商务",
+      "summary": "尼尔森IQ（NIQ）周二宣布正式推出NIQ Product Intelligence，这是一款全新解决方案，旨在帮助零售商和品牌将碎片化的产品数据转化为结构化的可互操作智能...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumh2960514.shtml"
     },
     {
-      "time": "17:50:15",
-      "title": "黑石完成规模超130亿美元亚洲私募股权基金募资，创下区域募资新高",
-      "summary": "核心要点黑石最新一期亚洲私募股权基金募资总额达 131 亿美元；三期亚洲旗舰基金募资规模突破 100 亿美元初始目标；过去两年黑石在亚洲完成 12 笔投资...",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivq4783507.shtml"
+      "time": "22:15:17",
+      "title": "黑石完成旗下最大亚洲私募股权基金募资，规模超130亿美元",
+      "summary": " 黑石集团周二表示，其最新一期亚洲私募股权基金已筹集到131亿美元，创下该集团在该地区规模最大的私募股权基金募集纪录。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumn1417304.shtml"
     },
     {
-      "time": "17:48:18",
-      "title": "伯纳姆：如果接替斯塔默成为英国首相 不会提前举行大选",
-      "summary": "有望出任英国首相的安迪·伯纳姆表示，如果他今年夏天接替基尔·斯塔默，不会提前举行大选。 伯纳姆的发言人周二表示，如果伯纳姆入主唐宁街，他不会提前举行大选。",
-      "url": "https://finance.sina.com.cn/world/2026-06-02/doc-inhzzivn3114436.shtml"
+      "time": "22:15:05",
+      "title": "Beachbody将出席Noble Capital Markets新兴成长虚拟会议",
+      "summary": " The Beachbody Company， Inc．宣布，公司执行董事长Mark Goldston和临时首席财务官Brad Ramberg将出席Noble Capital Markets新兴成长虚拟股权会议，并发表演讲。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumk4639996.shtml"
     },
     {
-      "time": "17:47:18",
-      "title": "股东交售股票数量据悉已可使裕信银行对德国商业银行持股比例远超30%",
-      "summary": " 据知情人士透露，裕信银行已获得足够承诺，将使其对德国商业银行的持股比例明显升破30%，为其以386亿欧元（450亿美元）收购这家德国竞争对手的方案增添了动能。",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivn3113872.shtml"
+      "time": "22:13:30",
+      "title": "黄仁勋称Marvell有望成为下一家万亿美元公司，股价飙升20%",
+      "summary": "英伟达CEO黄仁勋将Marvell Technology誉为下一家万亿美元级企业，这一表态推动该公司股价在周二上涨了20%。 这家为数据中心设计芯片的半导体公司股价飙升。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumi1426926.shtml"
     },
     {
-      "time": "17:45:26",
-      "title": "光大期货0602热点追踪：山西安监升级 焦煤还能追涨吗",
-      "summary": "光大期货0602热点追踪：山西安监升级 焦煤还能追涨吗",
-      "url": "https://finance.sina.com.cn/money/future/2026-06-02/doc-inhzzivn3112909.shtml"
+      "time": "22:12:20",
+      "title": "PPG发布白皮书 静电喷涂技术助力航运业降本减碳",
+      "summary": "PPG工业公司周二发布了一份题为《船体涂料静电喷涂应用》的白皮书，详细阐述了这一先进的涂装技术如何帮助船东和运营商提高效率并减少环境影响。",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumi1426413.shtml"
     },
     {
-      "time": "17:44:46",
-      "title": "SEC、马斯克为推特持仓案的和解协议辩护 回应法官的质疑",
-      "summary": " 美国证券交易委员会（SEC）的律师周一表示，该机构与马斯克旨在了结推特持仓案的和解方案，历经了近一年的谈判。之前一位法官对该和解方案表示了担忧。",
-      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzivq4780449.shtml"
+      "time": "22:11:31",
+      "title": "Anthropic将Mythos模型扩展至15个国家的150家新增机构",
+      "summary": "Anthropic周二表示，将Mythos人工智能模型向15个国家的另外150家合作伙伴开放使用权限。 该公司表示，此次扩展涵盖了首批试点中覆盖面不足的行业，如电力、水务...",
+      "url": "https://finance.sina.com.cn/stock/usstock/c/2026-06-02/doc-inhzzumh2958687.shtml"
     }
   ],
   "zt_pool": [
