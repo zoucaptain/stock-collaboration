@@ -1,0 +1,5 @@
+warning: in the working copy of 'position.md', LF will be replaced by CRLF the next time Git touches it
+[main cd30f8a] auto: 持仓更新 2026-06-04 20:03
+ 1 file changed, 5 insertions(+), 80 deletions(-)
+To https://github.com/zoucaptain/stock-collaboration.git
+   af8ccb1..cd30f8a  main -> main
