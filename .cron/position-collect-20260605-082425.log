@@ -1,0 +1,4 @@
+[08:24:25] === stock-position-collector 启动 ===
+[08:24:25] 持仓 1 只: ['sz002491']
+[08:24:25] 尝试 Sina hq.sinajs.cn ...
+[08:24:25] ✅ 已写 position.md (865 字节, 数据源: Sina hq.sinajs.cn)

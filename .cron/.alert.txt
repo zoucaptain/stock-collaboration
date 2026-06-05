@@ -1,0 +1,8 @@
+🚨 [Cron 告警] 2026-06-05 08:25
+
+⚠️ scheduler.md 未在 2026-06-05 更新（最后 2026-06-04）
+
+请检查：
+1) cronjob list 看 last_status / last_run_at
+2) .cron/ 目录下对应任务的 log
+3) STOCK_GITHUB_TOKEN 是否过期

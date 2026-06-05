@@ -1,0 +1,5 @@
+[2026-06-05 08:25:23] healthcheck run
+  scheduler.md: 2026-06-04
+  position.md:  2026-06-05
+  ALERTS:
+    - ⚠️ scheduler.md 未在 2026-06-05 更新（最后 2026-06-04）

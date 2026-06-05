@@ -1,0 +1,4 @@
+[08:24:08] === stock-position-collector 启动 ===
+[08:24:08] 配置文件不存在: C:\Users\yanyan.zou\.hermes\stock-position.json
+[08:24:08] 持仓列表为空 → 写空仓 position.md
+[08:24:08] 已写空仓: C:\Users\yanyan.zou\AppData\Local\Temp\stock-collaboration\position.md
