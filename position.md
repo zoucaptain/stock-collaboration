@@ -1,7 +1,7 @@
-# 持股情况 - 2026-06-05
+# 持股情况 - 2026-06-08
 
-> **更新时间**: 1[19:50:23] 持仓列表为空 → 写空仓 position.md
-[19:50:23] 已写空仓: C:\Users\yanyan.zou\AppData\Local\Temp\stock-collaboration\position.md
+> **更新时间**: 1[19:50:26] 持仓列表为空 → 写空仓 position.md
+[19:50:26] 已写空仓: C:\Users\yanyan.zou\AppData\Local\Temp\stock-collaboration\position.md
 � | 0% |
 | 持仓数量 | 0 只 |
 | 账户状态 | 空仓 |
