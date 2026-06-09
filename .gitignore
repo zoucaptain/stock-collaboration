@@ -1,2 +1,4 @@
 # cron 日志和告警文件（每次跑都会变）
 .cron/
+# .env 含可能的 token
+.env
