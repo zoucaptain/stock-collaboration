@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "report_name": "A股长期趋势预判",
+    "report_type": "long_term_outlook",
+    "version": "1.0.0",
+    "generated_at": "2026-07-16T10:36:00+08:00",
+    "data_cutoff": "2026-07-15",
+    "next_update_trigger": "weekly_monday_10:30",
+    "cron_job_id": "f105350e3528",
+    "source_for": "openclaw_execution"
+  },
+
+  "market_outlook": {
+    "direction": "震荡偏强",
+    "pattern": "难普涨，分化加剧",
+    "time_horizon": "未来3-6个月",
+    "index_ranges": {
+      "shanghai_composite": {
+        "code": "sh000001",
+        "lower": 3800,
+        "upper": 4200,
+        "character": "大区间震荡"
+      },
+      "chinext": {
+        "code": "sz399006",
+        "lower": 3500,
+        "upper": 4100,
+        "character": "弹性更大"
+      },
+      "star_50": {
+        "code": "sh000688",
+        "lower": 1800,
+        "upper": 2200,
+        "character": "波动最剧"
+      }
+    }
+  },
+
+  "fundamental_drivers": {
+    "internal": {
+      "gdp_h1_yoy": {
+        "actual": 4.7,
+        "target": 5.0,
+        "below_target": true,
+        "release_date": "2026-07-15"
+      },
+      "industrial_value_added_jun_yoy": {
+        "actual": 5.3,
+        "acceleration_pct": 0.8,
+        "interpretation": "供给端强"
+      },
+      "retail_sales_h1_yoy": {
+        "actual": 1.3,
+        "trend": "逐月减速",
+        "interpretation": "需求端弱"
+      },
+      "real_estate_investment_h1_yoy": {
+        "actual": -18.0,
+        "trend": "继续塌方，扩大1.8pct"
+      },
+      "unemployment_jun": {
+        "actual": 5.0,
+        "trend": "改善0.1pct"
+      },
+      "m2_jun_yoy": {
+        "actual": 8.0,
+        "consensus": 8.3,
+        "below_consensus": true
+      },
+      "new_loans_h1": {
+        "actual_trillion": 10.72,
+        "yoy_comparison": "持平"
+      }
+    },
+    "external": {
+      "us_cpi_jun_yoy": {
+        "actual": 3.5,
+        "consensus": 3.8,
+        "previous": 4.2,
+        "below_consensus": true
+      },
+      "us_core_cpi_jun_yoy": {
+        "actual": 2.6,
+        "consensus": 2.8,
+        "previous": 2.9
+      },
+      "us_cpi_jun_mom": {
+        "actual": -0.4,
+        "consensus": -0.1,
+        "previous": 0.5,
+        "note": "6年来首次下降"
+      },
+      "us_core_cpi_jun_mom": {
+        "actual": 0.0,
+        "consensus": 0.2,
+        "note": "5年来首次未涨"
+      },
+      "fed_sep_hike_probability": {
+        "actual": 0.63,
+        "interpretation": "市场仍预期加息"
+      },
+      "warsh_stance": "淡化CPI，重申抗通胀，鹰派",
+      "geopolitics": "美对伊新一轮打击，油价波动",
+      "gold_price": 4062.0,
+      "usd_cny": 6.765
+    },
+    "policy_direction": {
+      "fiscal": "更加积极有为，2026预算赤字率可能4.5%",
+      "monetary": "适度宽松，降准降息仍有空间，5年期LPR可能单独较大幅度下调",
+      "structural": "反内卷+统一大市场+投资于人+新质生产力",
+      "real_estate": "止跌回稳是底线，5年期LPR可能单降",
+      "fx": "稳汇率，反内卷约束下出口承压"
+    }
+  },
+
+  "sector_priority": [
+    {
+      "rank": 1,
+      "name": "创新药/医药商业",
+      "tier": 1,
+      "tier_label": "政策最确定+资金已抱团",
+      "rating": 5,
+      "logic": [
+        "7/15主力净流入+80亿（化学制药+36.75亿最亮）",
+        "集采出清+创新药出海+估值底",
+        "美CPI降温→创新药融资环境改善"
+      ],
+      "key_catalysts": ["集采出清3年", "创新药海外授权创纪录", "估值历史中位以下"]
+    },
+    {
+      "rank": 2,
+      "name": "券商/非银金融",
+      "tier": 1,
+      "tier_label": "政策最确定+资金已抱团",
+      "rating": 5,
+      "logic": [
+        "7/15主力净流入+21.79亿",
+        "降准降息预期+成交量放大",
+        "7/25政治局会议+8/15 LPR是关键催化"
+      ],
+      "key_catalysts": ["降准降息预期", "成交量放大", "政治局会议"]
+    },
+    {
+      "rank": 3,
+      "name": "银行/大金融蓝筹",
+      "tier": 1,
+      "tier_label": "政策最确定+资金已抱团",
+      "rating": 4,
+      "logic": [
+        "7/15美银行股开门红（高盛+9%）",
+        "高股息+防御属性",
+        "适合在科技股调整时切换"
+      ],
+      "key_catalysts": ["高股息", "防御属性", "美银行股映射"]
+    },
+    {
+      "rank": 4,
+      "name": "白酒/必选消费",
+      "tier": 2,
+      "tier_label": "周期+出清",
+      "rating": 4,
+      "logic": [
+        "7/15白酒+5.22%行业涨幅第一",
+        "主力净流入+19.73亿",
+        "行业CR5 87%营收/96%利润",
+        "2026下半年触底回升（高盛/中酒协共识）"
+      ],
+      "key_catalysts": ["行业触底回升共识", "低基数+报表转正", "经销商大会积极"],
+      "risks": ["禁酒令持续", "宏观消费弱"]
+    },
+    {
+      "rank": 5,
+      "name": "工业母机/高端制造/机器人",
+      "tier": 2,
+      "tier_label": "周期+出清",
+      "rating": 4,
+      "logic": [
+        "6月工业+5.3%加速",
+        "1-5月规上工业企业利润+18.8%",
+        "投资于人+新质生产力政策导向",
+        "海外燃机订单排至2030之后"
+      ],
+      "key_catalysts": ["工业加速", "企业利润+18.8%", "海外订单长周期"]
+    },
+    {
+      "rank": 6,
+      "name": "军工",
+      "tier": 2,
+      "tier_label": "周期+出清",
+      "rating": 3,
+      "logic": [
+        "美对伊新一轮打击+霍尔木兹+印太",
+        "7/15国防白皮书窗口+业绩预告"
+      ],
+      "key_catalysts": ["地缘升级", "国防白皮书", "业绩预告"],
+      "risks": ["7/15军工电子主力净流出-6.65亿（短期承压）"]
+    },
+    {
+      "rank": 7,
+      "name": "地产链（开发/建材/家居）",
+      "tier": 3,
+      "tier_label": "等催化",
+      "rating": 3,
+      "logic": [
+        "7/15房地产+1.10%/建材+2.15%（脉冲）",
+        "5年期LPR可能单独下调"
+      ],
+      "key_catalysts": ["5年期LPR单降"],
+      "risks": ["难反转"]
+    },
+    {
+      "rank": 8,
+      "name": "黄金/有色",
+      "tier": 3,
+      "tier_label": "等催化",
+      "rating": 3,
+      "logic": [
+        "黄金4062高位+地缘+降息预期"
+      ],
+      "key_catalysts": ["黄金高位", "央行购金节奏"],
+      "risks": ["7/15有色主力净流出-15.99亿"]
+    },
+    {
+      "rank": 9,
+      "name": "半导体/科创50",
+      "tier": 3,
+      "tier_label": "等催化",
+      "rating": 3,
+      "logic": [
+        "WAIC 7/17-20+AI算力是中期主线"
+      ],
+      "key_catalysts": ["WAIC 7/17-20", "AI算力", "半年报雷出清"],
+      "risks": [
+        "7/15半导体-57.69亿主力净流出（最大抛压）",
+        "费半-2.08%",
+        "IBM-25%警告"
+      ]
+    },
+    {
+      "rank": 10,
+      "name": "传统周期（钢铁/煤炭/化工）",
+      "tier": 4,
+      "tier_label": "远离",
+      "rating": 1,
+      "logic": [
+        "7/15化工板块主力净流出-6.71亿",
+        "地产链拖累+出口承压"
+      ],
+      "key_catalysts": ["9-10月旺季数据（等待）"]
+    }
+  ],
+
+  "current_holdings": [
+    {
+      "code": "sz002020",
+      "name": "京新药业",
+      "sector_rank": 1,
+      "sector": "创新药/医药商业",
+      "shares": 500,
+      "cost": 15.21,
+      "entry_date": "2026-07-15",
+      "mid_term_view": "持有是合理选择",
+      "logic_bull": [
+        "集采压力已出清3年",
+        "创新药出海窗口",
+        "7/15医药板块主力净流入+80亿",
+        "美国CPI降温→融资环境改善",
+        "估值历史中位数以下"
+      ],
+      "logic_bear": [
+        "一致性评价+医保谈判压价",
+        "单品依赖（瑞舒伐他汀+匹伐他汀）",
+        "半年报业绩可能平淡"
+      ],
+      "position_management": {
+        "default": "持有",
+        "add_signal": "半年报无雷+主力周净流入维持正",
+        "reduce_signal": "主力周净流出+半年报雷"
+      }
+    },
+    {
+      "code": "sh600702",
+      "name": "舍得酒业",
+      "sector_rank": 4,
+      "sector": "白酒/必选消费",
+      "shares": 300,
+      "cost": 34.217,
+      "entry_date": "2026-07-15",
+      "mid_term_view": "持有需扛过半年报窗口",
+      "logic_bull": [
+        "行业触底回升共识（高盛/中酒协/联合资信）",
+        "行业CR5 87%/96%→头部相对受益",
+        "2026下半年低基数+报表转正窗口",
+        "7/15白酒+5.22%、主力净流入+19.73亿",
+        "经销商大会释放积极信号"
+      ],
+      "logic_bear": [
+        "半年报预亏超60%已披露（7/10）→7/30-8/30可能再砸",
+        "禁酒令常态化、政商务场景收缩",
+        "老酒市场存疑（真伪、标准）",
+        "2026上半年86.7%企业利润下滑"
+      ],
+      "position_management": {
+        "default": "持有",
+        "add_signal": "半年报披露后股价不再创新低（利空出尽）",
+        "reduce_signal": "半年报再亏损扩大+主力持续流出"
+      }
+    }
+  ],
+
+  "openclaw_execution_framework": {
+    "portfolio_character": "防御组合（医药+消费）",
+    "rationale_environment": "GDP 4.7%低于目标+半年报密集披露+中美博弈",
+    "attack_position_trigger": "等这三条任一兑现再加：1)政治局会议超预期政策 2)美联储9月明确降息 3)半年报雷出清（8月底）",
+    "monitoring_triggers": [
+      {
+        "trigger": "7/25政治局会议",
+        "date": "2026-07-25",
+        "meaning": "政策定调→重评估所有板块"
+      },
+      {
+        "trigger": "8/15 LPR调整",
+        "date": "2026-08-15",
+        "meaning": "5年期LPR若单降→地产链加仓"
+      },
+      {
+        "trigger": "半年报披露高峰",
+        "date": "2026-07-30 to 2026-08-30",
+        "meaning": "京新/舍得的雷出清节奏"
+      },
+      {
+        "trigger": "美联储9月议息",
+        "date": "2026-09-中",
+        "meaning": "加息vs降息→重新评估外围"
+      },
+      {
+        "trigger": "8/15 MLF续作",
+        "date": "2026-08-15",
+        "meaning": "央行宽松窗口"
+      },
+      {
+        "trigger": "7/17-20 WAIC",
+        "date": "2026-07-17 to 2026-07-20",
+        "meaning": "AI算力链催化"
+      },
+      {
+        "trigger": "沪市首份半年报",
+        "date": "2026-07-18",
+        "meaning": "中船特气，半年报行情开打"
+      }
+    ]
+  },
+
+  "risks_and_caveats": [
+    "判断全部基于公开数据和机构共识，非内幕或独家调研",
+    "机构共识会变（高盛5月看多白酒、6月可能调评级）",
+    "6个月内方向可判断，6-12个月只能讲结构性",
+    "板块排序是中线优先级（不等于本周/本月最优）",
+    "OpenClaw执行框架是逻辑条件，不是触发器",
+    "中美贸易冲突Q4升级窗口",
+    "房地产投资降幅继续扩大",
+    "美国9月仍可能加息",
+    "半年报业绩雷（7/15-8/31密集披露）"
+  ],
+
+  "update_rules": {
+    "weekly_monday_10_30": "自动更新（cron job f105350e3528）",
+    "monthly_first": "长期方向+区间+板块排序大更新",
+    "event_driven": "政治局会议/美联储/半年报披露即时更新"
+  }
+}
