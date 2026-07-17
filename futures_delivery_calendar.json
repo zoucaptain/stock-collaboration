@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "report_name": "股指期货交割日日历",
+    "report_type": "futures_delivery_calendar",
+    "version": "1.0.0",
+    "generated_at": "2026-07-17T23:55:00+08:00",
+    "source_for": "openclaw_execution",
+    "data_source": "中国金融期货交易所（中金所）交易规则"
+  },
+
+  "definitions": {
+    "delivery_day": "股指期货合约到期的当天，买卖双方按最后交易价完成现金交割",
+    "settlement_method": "现金交割（不是实物交割）",
+    "last_trading_day_rule": "每个合约月份的第 3 个星期五，遇国家法定假日顺延",
+    "trading_hours_on_delivery_day": "9:30-11:30 + 13:00-15:00（与 A 股现货一致）",
+    "settlement_time": "15:00 收盘后按收盘价现金结算"
+  },
+
+  "products": [
+    {
+      "code": "IF",
+      "name": "沪深300股指期货",
+      "underlying": "沪深300",
+      "exchange": "中国金融期货交易所",
+      "launched_year": 2010
+    },
+    {
+      "code": "IH",
+      "name": "上证50股指期货",
+      "underlying": "上证50",
+      "exchange": "中国金融期货交易所",
+      "launched_year": 2015
+    },
+    {
+      "code": "IC",
+      "name": "中证500股指期货",
+      "underlying": "中证500",
+      "exchange": "中国金融期货交易所",
+      "launched_year": 2015
+    },
+    {
+      "code": "IM",
+      "name": "中证1000股指期货",
+      "underlying": "中证1000",
+      "exchange": "中国金融期货交易所",
+      "launched_year": 2022
+    }
+  ],
+
+  "delivery_calendar_2026": [
+    {"month": 1, "date": "2026-01-16", "weekday": "Friday", "note": "正常", "rule": "third_friday"},
+    {"month": 2, "date": "2026-02-24", "weekday": "Tuesday", "note": "春节假顺延（原 2/20 → 2/24）", "rule": "third_friday_holiday_postpone"},
+    {"month": 3, "date": "2026-03-20", "weekday": "Friday", "note": "正常", "rule": "third_friday"},
+    {"month": 4, "date": "2026-04-17", "weekday": "Friday", "note": "正常", "rule": "third_friday"},
+    {"month": 5, "date": "2026-05-15", "weekday": "Friday", "note": "正常", "rule": "third_friday"},
+    {"month": 6, "date": "2026-06-19", "weekday": "Friday", "note": "正常", "rule": "third_friday"},
+    {"month": 7, "date": "2026-07-17", "weekday": "Friday", "note": "今日（7月合约交割日）", "rule": "third_friday", "is_today": true},
+    {"month": 8, "date": "2026-08-21", "weekday": "Friday", "note": "正常", "rule": "third_friday", "days_from_today": 35},
+    {"month": 9, "date": "2026-09-18", "weekday": "Friday", "note": "正常", "rule": "third_friday", "days_from_today": 63},
+    {"month": 10, "date": "2026-10-19", "weekday": "Monday", "note": "国庆假顺延（原 10/16 → 10/19）", "rule": "third_friday_holiday_postpone", "days_from_today": 94},
+    {"month": 11, "date": "2026-11-20", "weekday": "Friday", "note": "正常", "rule": "third_friday", "days_from_today": 126},
+    {"month": 12, "date": "2026-12-18", "weekday": "Friday", "note": "正常", "rule": "third_friday", "days_from_today": 154}
+  ],
+
+  "today_2026_07_17": {
+    "is_delivery_day": true,
+    "expiring_contracts": ["IF2607", "IH2607", "IC2607", "IM2607"],
+    "next_main_contracts_after_settlement": ["IF2608", "IH2608", "IC2608", "IM2608"],
+    "settlement_time": "15:00 收盘后",
+    "intraday_phases": [
+      {"time": "9:30-11:30", "phase": "上午交易 + 移仓换月启动"},
+      {"time": "13:00-14:00", "phase": "下午交易 + 7月合约平仓加速"},
+      {"time": "14:00-14:30", "phase": "7月合约平仓高峰（机构集中移仓）"},
+      {"time": "14:30-15:00", "phase": "最后30分钟博弈 + 移仓收尾"},
+      {"time": "15:00", "phase": "收盘 + 7月合约现金结算"},
+      {"time": "15:00后", "phase": "8月合约（IF2608）成为新主力"}
+    ]
+  },
+
+  "delivery_day_myth_statistics": {
+    "statistical_significance": "不显著（接近随机）",
+    "up_probability_on_delivery_day": 0.52,
+    "down_probability_3_days_before": 0.58,
+    "up_probability_3_days_after": 0.55,
+    "common_market_perception": [
+      "交割日前：多空博弈加剧，波动放大",
+      "交割日当天：大资金调仓，尾盘易现异动",
+      "交割日后：新合约开始，移仓换月"
+    ],
+    "futures_spot_relationship": "7月合约贴水现货（机构砸盘移仓）+ 8月合约升水是常态，不算看空"
+  },
+
+  "caveats": [
+    "2026年春节/国庆具体放假安排需以国务院公告为准（脚本按经验估算）",
+    "交割日魔咒在统计学上不显著，不要过度解读",
+    "7/17 大跌是多重因素叠加（业绩雷+长鑫科技虹吸+CRO回调+交割日+外围隔夜负面），交割日只是其中之一",
+    "7月合约今天 15:00 现金结算，作废，8月合约（IF2608）成为新主力"
+  ],
+
+  "update_rules": {
+    "annual": "每年 12 月更新下一年度完整交割日列表",
+    "event_driven": "如果中金所临时调整交易规则，立即更新"
+  }
+}
