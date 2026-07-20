@@ -2,13 +2,13 @@
   "meta": {
     "report_name": "A股长期趋势预判",
     "report_type": "long_term_outlook",
-    "version": "2.0.0",
-    "generated_at": "2026-07-20T10:10:00+08:00",
+    "version": "2.1.0",
+    "generated_at": "2026-07-20T15:15:00+08:00",
     "data_cutoff": "2026-07-20",
     "next_update_trigger": "weekly_monday_10:30",
     "cron_job_id": "f105350e3528",
     "source_for": "openclaw_execution",
-    "note": "手动跑（cron f105350e3528 7/20 失败，手动补救）"
+    "note": "本周实证更新：科创50/费半技术性熊市、通讯-10.64%、沪指累计-10.31%"
   },
   "market_outlook": {
     "direction": "震荡偏强",
@@ -33,6 +33,54 @@
         "upper": 2050,
         "character": "波动最剧，7/17最低1698（破前低），7/20开盘反弹"
       }
+    },
+    "empirical_week_2026_07_13_to_07_20": {
+      "shanghai_close_2026_07_13": 3913.79,
+      "shanghai_close_2026_07_17_low": 3764.16,
+      "shanghai_close_2026_07_20": 3796.28,
+      "shanghai_week_change_pct": -3.0,
+      "shanghai_low_week_pct": -3.83,
+      "shanghai_cumulative_from_high": -10.31,
+      "high_point_2026_06_22": 4196.44,
+      "high_to_current_pct": -9.54,
+      "low_2026_07_20_intraday": 3741.11,
+      "high_2026_07_20_intraday": 3831.66,
+      "week_kline": "连跌4天 → 7/20企稳 +0.85%（未站上3800）",
+      "note": "沪指尚未入熊市，但距20%阈值仅差9.5pct"
+    },
+    "structural_bear_assessment": {
+      "shanghai": {
+        "pct_from_high": -9.54,
+        "is_bear": false,
+        "gap_to_bear": "-10.46pct needed"
+      },
+      "chinext": {
+        "pct_from_high": -10.6,
+        "is_bear": false,
+        "gap_to_bear": "-9.4pct needed"
+      },
+      "csi_300_estimate": {
+        "pct_from_high": -3.2,
+        "is_bear": false
+      },
+      "star_50": {
+        "pct_from_high": -21.5,
+        "is_bear": true,
+        "high_2026_06_22": 2188,
+        "low_2026_07_17": 1715
+      },
+      "sox": {
+        "pct_from_high": -21.3,
+        "is_bear": true,
+        "is_technical_bear": "7/18确认"
+      }
+    },
+    "sector_dispersion_2026_07_20": {
+      "top_gainer_pct": 7.14,
+      "top_loser_pct": -10.64,
+      "pattern": "指数红盘 + 板块巨幅分化（结构性，非系统性）",
+      "top_losers_likely": "通信设备、光学光电子、制药仍在杀",
+      "note": "系统性熊市 = 全员下跌；今天有赢有输 → 结构性熊市"
     }
   },
   "fundamental_drivers": {
@@ -149,9 +197,8 @@
       },
       "china_us_trade_2026_07_20": {
         "status": "美财长贝森特确认新一轮谈判",
-        "timing": "7/20 周一之前",
-        "impact": "⚠️ 中美 5/13 第一次谈判破裂后首次确认第二轮 — 重大利好",
-        "trump_indonesia": "特朗普 7/15 对印尼加征 19% 关税"
+        "timing": "7/20 周一",
+        "expectation": "若达成 → 全线利好；若破裂 → 再探底"
       },
       "kimi_2026_07_19": {
         "event": "月之暗面 Kimi 暂停 C 端新用户订阅",
@@ -182,7 +229,8 @@
         "2026H1创新药概念股20+家预增（截至7/15），板块业绩验证窗口",
         "集采出清3年+创新药出海+估值底",
         "美CPI 3.5%降温→创新药融资环境改善",
-        "5日涨跌幅: 医疗服务+2.88% / 医疗研发外包+1.44% / 体外诊断+4.18%"
+        "5日涨跌幅: 医疗服务+2.88% / 医疗研发外包+1.44% / 体外诊断+4.18%",
+        "7/17 板块 -6.58%（你说的跌近 10% 是通信设备 -10.64%）"
       ],
       "key_catalysts": [
         "集采出清3年",
@@ -367,7 +415,8 @@
       "logic": [
         "金价4062→3970回落（-2.3%），降息预期消退",
         "美元指数走强100.71（压制金价）",
-        "5日工业金属+36亿/铝+20亿/铜+19亿（有色内部分化：工业金属>黄金）"
+        "5日工业金属+36亿/铝+20亿/铜+19亿（有色内部分化：工业金属>黄金）",
+        "6/22→7/17 科创50 -21.5%（技术性熊市确认）、费半 -21.3%"
       ],
       "key_catalysts": [
         "地缘升级",
@@ -378,7 +427,8 @@
         "5日黄金下跌-9.57%（10日榜）"
       ],
       "downgrade_note": "rank 8→9, rating 3→2。逻辑：美元走强+降息预期消退，金价高位回落",
-      "risk_v2": "7/16/17/18 三日累计已 -7% / 费半入熊"
+      "risk_v2": "7/16/17/18 三日累计已 -7% / 费半入熊",
+      "empirical_status": "技术性熊市中（科创50/费半）"
     },
     {
       "rank": 10,
@@ -432,7 +482,10 @@
         "default": "持有",
         "add_signal": "半年报无雷+主力周净流入维持正+股价站稳MA20",
         "reduce_signal": "主力周净流出+半年报雷+跌破MA20"
-      }
+      },
+      "empirical_2026_07_17": "板块 -6.58% 单日最深一次",
+      "empirical_2026_07_20_status": "板块分化，化学制药仍可能承压",
+      "est_price_2026_07_20_range": "12.46 - 13.93（最坏-最好假设）"
     },
     {
       "code": "sh600702",
@@ -465,7 +518,9 @@
         "default": "持有",
         "add_signal": "半年报披露后股价不再创新低（利空出尽）+板块周净流入",
         "reduce_signal": "半年报再亏损扩大+主力持续流出+跌破30元"
-      }
+      },
+      "empirical_2026_07_20_status": "白酒相对抗跌（顶部板块之一）",
+      "est_price_2026_07_20_range": "33.5 - 34.0"
     }
   ],
   "openclaw_execution_framework": {
@@ -532,6 +587,36 @@
         "trigger": "8/15 LPR 调整",
         "date": "2026-08-15",
         "meaning": "5 年期 LPR 是否单降"
+      },
+      {
+        "trigger": "本周（7/14-7/20）实证：沪指 -3.00%、累计 -10.31%",
+        "date": "2026-07-20",
+        "meaning": "沪指距技术性熊市仅差 9.5pct，下一根阴线可能触发"
+      },
+      {
+        "trigger": "科创 50/费半 确认技术性熊市",
+        "date": "2026-07-18",
+        "meaning": "⭐ AI 算力 + 半导体中期主线有压力（半年报雷出清前）"
+      },
+      {
+        "trigger": "7/25 政治局会议",
+        "date": "2026-07-25",
+        "meaning": "⭐⭐ 决定大盘修复 vs 再探底"
+      },
+      {
+        "trigger": "7/27-28 美联储议息",
+        "date": "2026-07-27 to 2026-07-28",
+        "meaning": "⭐⭐⭐ 9月降息预期确认 → 全球风险资产利好"
+      },
+      {
+        "trigger": "7/30 主板半年报雷出清",
+        "date": "2026-07-30",
+        "meaning": "京新/舍得的雷出清节奏"
+      },
+      {
+        "trigger": "7/21 7/22 7/23 北向资金动向",
+        "date": "2026-07-21 to 2026-07-23",
+        "meaning": "观察 7/20 反弹是否延续"
       }
     ],
     "removed_triggers": [
