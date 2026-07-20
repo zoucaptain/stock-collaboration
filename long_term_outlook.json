@@ -2,13 +2,13 @@
   "meta": {
     "report_name": "A股长期趋势预判",
     "report_type": "long_term_outlook",
-    "version": "2.1.3",
-    "generated_at": "2026-07-20T17:21:40+08:00",
+    "version": "2.1.4",
+    "generated_at": "2026-07-20T17:22:57+08:00",
     "data_cutoff": "2026-07-20",
     "next_update_trigger": "weekly_monday_10:30",
     "cron_job_id": "f105350e3528",
     "source_for": "openclaw_execution",
-    "note": "v2.1.3: 用户纠错 — 我 API 的京新 13.76/舍得 32.88 不对（用户：京新 14.43/舍得 33.58）。清价格字段，等 19:50 collector 或用户告知。"
+    "note": "v2.1.4: 抓错字段修正（parts[1] → parts[3]）。京新 14.43/舍得 33.58 真实价。用户纠错后找到根本原因。"
   },
   "market_outlook": {
     "direction": "震荡偏强",
@@ -484,11 +484,11 @@
       "sector": "创新药/医药商业",
       "shares": 500,
       "cost": 15.21,
-      "current_price": null,
-      "current_price_as_of": "unverified - 用户纠错 7/20",
-      "market_value": null,
-      "pnl_amount": null,
-      "pnl_pct": null,
+      "current_price": 14.43,
+      "current_price_as_of": "2026-07-20 15:36",
+      "market_value": 7215.0,
+      "pnl_amount": -390.0,
+      "pnl_pct": -5.13,
       "entry_date": "2026-07-15",
       "mid_term_view": "持有是合理选择（板块逻辑未变）",
       "logic_bull": [
@@ -512,9 +512,13 @@
       "empirical_2026_07_17": "板块 -6.58% 单日最深一次",
       "empirical_2026_07_20_status": "板块分化，化学制药仍可能承压",
       "est_price_2026_07_20_range": null,
-      "price_note": "⚠️ 我 API 拉到的价与用户券商 App 不一致，禁止用我的数据。",
+      "price_note": "新浪 hq.sinajs.cn parts[3] = 当前价。**v6.6 抓错字段修正**：之前误用 parts[1] = 今开 13.76",
       "previous_error": "v2.1.0 误用 7/17 板块 -6.58% 估京新 7/20 价格，错误",
-      "action_required": "等 19:50 collector 跑或用户告知真实收盘价"
+      "action_required": "等 19:50 collector 跑或用户告知真实收盘价",
+      "open_price": 13.76,
+      "prev_close": 13.82,
+      "high_today": 14.67,
+      "low_today": 13.57
     },
     {
       "code": "sh600702",
@@ -523,11 +527,11 @@
       "sector": "白酒/必选消费",
       "shares": 300,
       "cost": 34.217,
-      "current_price": null,
-      "current_price_as_of": "unverified - 用户纠错 7/20",
-      "market_value": null,
-      "pnl_amount": null,
-      "pnl_pct": null,
+      "current_price": 33.58,
+      "current_price_as_of": "2026-07-20 15:34",
+      "market_value": 10074.0,
+      "pnl_amount": -191.1,
+      "pnl_pct": -1.86,
       "entry_date": "2026-07-15",
       "mid_term_view": "持有需扛过半年报窗口（已预减）",
       "logic_bull": [
@@ -550,9 +554,13 @@
       },
       "empirical_2026_07_20_status": "白酒相对抗跌（顶部板块之一）",
       "est_price_2026_07_20_range": null,
-      "price_note": "⚠️ 我 API 拉到的价与用户券商 App 不一致，禁止用我的数据。",
+      "price_note": "新浪 hq.sinajs.cn parts[3] = 当前价。**v6.6 抓错字段修正**：之前误用 parts[1] = 今开 32.88",
       "previous_error": "v2.1.0 错误：写 34.14 + 小赚，实际 32.88 亏损",
-      "action_required": "等 19:50 collector 跑或用户告知真实收盘价"
+      "action_required": "等 19:50 collector 跑或用户告知真实收盘价",
+      "open_price": 32.88,
+      "prev_close": 32.72,
+      "high_today": 34.56,
+      "low_today": 32.73
     }
   ],
   "openclaw_execution_framework": {
@@ -686,6 +694,9 @@
     },
     {
       "note": "v6.6 红线已追加，但 v2.1.2 仍错：用户纠错 — 京新 14.43/舍得 33.58。我的 API 与 App 不一致。"
+    },
+    {
+      "note": "v2.1.4 修正: 我前面 v2.1.0/v2.1.2 用 parts[1]（开盘价），实际当前价是 parts[3]。根本原因找到：字段抓错，不是数据源错。腾讯 qt.gtimg.cn 也确认京新 14.43/舍得 33.58。"
     }
   ],
   "update_rules": {
