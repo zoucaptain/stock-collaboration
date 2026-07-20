@@ -2,13 +2,13 @@
   "meta": {
     "report_name": "A股长期趋势预判",
     "report_type": "long_term_outlook",
-    "version": "2.1.4",
-    "generated_at": "2026-07-20T17:22:57+08:00",
+    "version": "2.1.5",
+    "generated_at": "2026-07-20T17:29:06+08:00",
     "data_cutoff": "2026-07-20",
     "next_update_trigger": "weekly_monday_10:30",
     "cron_job_id": "f105350e3528",
     "source_for": "openclaw_execution",
-    "note": "v2.1.4: 抓错字段修正（parts[1] → parts[3]）。京新 14.43/舍得 33.58 真实价。用户纠错后找到根本原因。"
+    "note": "v2.1.5: 全文修正 previous_error/price_note。open_price 字段定义为 parts[1] 的今开价（13.76/32.88）保留正确。当前价 parts[3] = 14.43/33.58。"
   },
   "market_outlook": {
     "direction": "震荡偏强",
@@ -512,8 +512,8 @@
       "empirical_2026_07_17": "板块 -6.58% 单日最深一次",
       "empirical_2026_07_20_status": "板块分化，化学制药仍可能承压",
       "est_price_2026_07_20_range": null,
-      "price_note": "新浪 hq.sinajs.cn parts[3] = 当前价。**v6.6 抓错字段修正**：之前误用 parts[1] = 今开 13.76",
-      "previous_error": "v2.1.0 误用 7/17 板块 -6.58% 估京新 7/20 价格，错误",
+      "price_note": "✅ 新浪 hq.sinajs.cn parts[3] = 当前价 14.43（v2.1.4 修正）。腾讯 qt.gtimg.cn 交叉验证 14.43 一致。open 13.76 (parts[1])、prev_close 13.82、high 14.67、low 13.57。",
+      "previous_error": "v2.1.0 用 7/17 化学制药板块 -6.58% 估京新个股价格（错）。v2.1.2 抓到 field 13.76 = parts[1] 今开价（错）。v2.1.4 修正为 parts[3] = 当前价 14.43。",
       "action_required": "等 19:50 collector 跑或用户告知真实收盘价",
       "open_price": 13.76,
       "prev_close": 13.82,
@@ -554,8 +554,8 @@
       },
       "empirical_2026_07_20_status": "白酒相对抗跌（顶部板块之一）",
       "est_price_2026_07_20_range": null,
-      "price_note": "新浪 hq.sinajs.cn parts[3] = 当前价。**v6.6 抓错字段修正**：之前误用 parts[1] = 今开 32.88",
-      "previous_error": "v2.1.0 错误：写 34.14 + 小赚，实际 32.88 亏损",
+      "price_note": "✅ 新浪 hq.sinajs.cn parts[3] = 当前价 33.58（v2.1.4 修正）。腾讯 qt.gtimg.cn 交叉验证 33.58 一致。open 32.88 (parts[1])、prev_close 32.72、high 34.56、low 32.73。",
+      "previous_error": "v2.1.0 写 34.14/亏 23 元（错）。v2.1.2 抓到 32.88 = parts[1] 今开价（错）。v2.1.4 修正为 parts[3] = 当前价 33.58。",
       "action_required": "等 19:50 collector 跑或用户告知真实收盘价",
       "open_price": 32.88,
       "prev_close": 32.72,
@@ -697,6 +697,9 @@
     },
     {
       "note": "v2.1.4 修正: 我前面 v2.1.0/v2.1.2 用 parts[1]（开盘价），实际当前价是 parts[3]。根本原因找到：字段抓错，不是数据源错。腾讯 qt.gtimg.cn 也确认京新 14.43/舍得 33.58。"
+    },
+    {
+      "note": "v2.1.5 扫描: 全文已清。13.76/32.88 现在仅出现在 open_price 字段（值是 7/20 当天今开价，是真实值）。parts[3] 当前价 = 14.43/33.58。"
     }
   ],
   "update_rules": {
