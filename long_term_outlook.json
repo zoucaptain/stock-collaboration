@@ -2,13 +2,13 @@
   "meta": {
     "report_name": "A股长期趋势预判",
     "report_type": "long_term_outlook",
-    "version": "2.1.5",
-    "generated_at": "2026-07-20T17:29:06+08:00",
+    "version": "2.1.6",
+    "generated_at": "2026-07-23T08:27:50+08:00",
     "data_cutoff": "2026-07-20",
     "next_update_trigger": "weekly_monday_10:30",
     "cron_job_id": "f105350e3528",
     "source_for": "openclaw_execution",
-    "note": "v2.1.5: 全文修正 previous_error/price_note。open_price 字段定义为 parts[1] 的今开价（13.76/32.88）保留正确。当前价 parts[3] = 14.43/33.58。"
+    "note": "v2.1.6: 7/22 美股真值修正（齐跌，纳指 -0.57%）"
   },
   "market_outlook": {
     "direction": "震荡偏强",
@@ -107,7 +107,21 @@
         "shanghai_range": "4,000-4,200",
         "driver": "半年报雷出清 + 9 月美联储窗口"
       }
-    ]
+    ],
+    "us_stock_2026_07_22_close": {
+      "date": "2026-07-22",
+      "source": "多源（腾讯 qt.gtimg.cn + 新浪 hq.sinajs.cn + 实时核对）",
+      "dow_close": 52218.58,
+      "dow_chg_pct": -0.01,
+      "nasdaq_close": 25690.9,
+      "nasdaq_chg_pct": -0.57,
+      "sp500_close": 7498.96,
+      "sp500_chg_pct": -0.14,
+      "sox_close": 12410.66,
+      "sox_chg_pct": 0.44,
+      "note": "7/22 美股真值：三大指数齐跌（纳指 -0.57% 跌幅最大），费半 +0.44% 微弱涨。**之前错误报\"7/22 大涨\"** — 实际是 v2.1.5 推送时混淆了\"累计涨跌幅\"（vs 7/21）和\"当日涨跌幅\"两个概念",
+      "previous_error": "v2.1.4/v2.1.5 把\"vs 7/21 累计涨幅\"误当\"7/22 当天涨幅\"报给用户"
+    }
   },
   "fundamental_drivers": {
     "internal": {
@@ -700,6 +714,9 @@
     },
     {
       "note": "v2.1.5 扫描: 全文已清。13.76/32.88 现在仅出现在 open_price 字段（值是 7/20 当天今开价，是真实值）。parts[3] 当前价 = 14.43/33.58。"
+    },
+    {
+      "note": "v2.1.6: 7/22 美股真值修正 + 用户纠错报\"大涨\"是错的（混淆累计涨跌幅 vs 当日涨跌幅）"
     }
   ],
   "update_rules": {
