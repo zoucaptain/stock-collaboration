@@ -104,6 +104,7 @@
 | **L_t0** | 持仓 | "如何做 T？"| `L_t0_trading.md` |
 | **L_top_bottom** | 持仓 | "关键支撑位在哪？"| `L_top_bottom_formula.md` |
 | **L_volume** | 持仓 | "量能信号是什么？"| `L_volume_doctrine.md` |
+| **L_monster** | 识别 | "市场情绪温度计？"| `L_monster_picker.md` |
 
 ---
 
