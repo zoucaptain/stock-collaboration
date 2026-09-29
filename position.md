@@ -40,3 +40,13 @@
 
 *本文件由 stock-position-collector.py 自动生成（数据源: Sina hq.sinajs.cn）*
 *GitHub: https://github.com/zoucaptain/stock-collaboration*
+
+
+## 9/29 (周一) 操作日志
+
+### 14:35 - 科伦药业 002422 清仓 100 股 @ 39.99
+- 持仓成本: 38.90
+- 卖出价: 39.99
+- 盈亏: +109 元 (+2.80%)
+- 原因: 14:30 后反弹到减仓区 39.50~40.00, 触发清仓
+- 操作: 持仓 100 股全部清仓
