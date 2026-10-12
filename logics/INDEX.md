@@ -1,11 +1,11 @@
 # 战法库 INDEX
 
-> **总览**: 12 个战法 + 1 个教训库
-> **更新**: 2026-09-30 15:30 (v10)
+> **总览**: 10 大战法 + L_post_market_review + L_top_bottom + L_lessons_today
+> **更新**: 2026-10-09 (v11)
 
 ---
 
-## 9 大战法 + L_post_market_review + L_lessons_today
+## 10 大战法 + L_post_market_review + L_top_bottom + L_lessons_today
 
 | # | 战法 | 文件 | 适配环境 |
 |---|------|------|----------|
@@ -18,9 +18,10 @@
 | 7 | L_six_step | L_six_step_method.md | 6 步法 |
 | 8 | L_t0 | L_t0_trading.md | 做 T |
 | 9 | L_volume | L_volume_doctrine.md | 成交量战法 |
-| 10 | L_post_market_review | L_post_market_review.md | 复盘 5 步战法 |
-| 11 | L_top_bottom | (复用 L_top_bottom_score 函数) | 顶部底部公式 |
-| 12 | **L_lessons_today** | **L_lessons_today.md** | **战法教训库 v1.0** |
+| 10 | L_chip_distribution | **L_chip_distribution.md (🆕 v14)** | **筹码分布战法** |
+| 11 | L_post_market_review | L_post_market_review.md | 复盘 5 步战法 |
+| 12 | L_top_bottom | (复用 L_top_bottom_score 函数) | 顶部底部公式 |
+| 13 | **L_lessons_today** | **L_lessons_today.md** | **战法教训库 v1.0** |
 
 ---
 
