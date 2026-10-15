@@ -784,33 +784,24 @@ class StockData:
 
     @staticmethod
     def get_concept_summary_ths() -> list:
-        """同花顺概念板块 (akshare, 0.7s)
+        """同花顺概念板块 (akshare stock_fund_flow_concept, 0.5s, 387 行)
 
-        返回每概念: 涨跌幅/净流入/领涨股
-        注: stock_board_concept_summary_ths 返回的是"驱动事件", 用 stock_board_concept_spot_em 或 ths 的实时版
+        返回每概念: 涨跌幅/流入/流出/净额/公司家数
+        注: 该接口实际是行业资金流全量版, 名字叫 concept 但内容含行业
         """
         try:
             import akshare as ak
-            # 试 akshare 的 ths 概念
-            df = None
-            for fn_name in ['stock_board_concept_spot_em', 'stock_board_concept_index_ths', 'stock_board_concept_summary_ths']:
-                try:
-                    fn = getattr(ak, fn_name, None)
-                    if fn is None: continue
-                    df_test = fn()
-                    if df_test is not None and len(df_test) > 0 and '涨跌幅' in df_test.columns:
-                        df = df_test
-                        break
-                except: continue
+            df = ak.stock_fund_flow_concept()
             results = []
             if df is not None and len(df) > 0:
                 for _, r in df.iterrows():
                     results.append({
-                        'name': r.get('板块名称', r.get('概念', r.get('名称', r.get('板块', '')))),
-                        'chg_pct': float(r.get('涨跌幅', 0)),
-                        'flow_in': float(r.get('净流入', r.get('资金净流入', 0))),
-                        'leader': r.get('领涨股', ''),
-                        'leader_chg': float(r.get('领涨股-涨跌幅', r.get('领涨股涨跌幅', 0))),
+                        'name': r.get('行业', ''),
+                        'chg_pct': float(r.get('行业-涨跌幅', 0)),
+                        'flow_in': float(r.get('流入资金', 0)),
+                        'flow_out': float(r.get('流出资金', 0)),
+                        'net_flow': float(r.get('净额', 0)),
+                        'company_count': int(r.get('公司家数', 0)),
                     })
             return results
         except Exception as e:
@@ -851,13 +842,19 @@ class StockData:
             with urllib.request.urlopen(req, timeout=8) as r:
                 html = r.read().decode('gbk', errors='ignore')
             results = []
-            for m in re.finditer(r'class="J_concept"[^>]*>([^<]+)</[^>]+>[^<]*<[^>]+>([^<]+)</[^>]+>[^<]+<[^>]+>([^<]+)净流入[^<]*</[^>]+>', html):
-                results.append({
-                    'concept': m.group(1).strip(),
-                    'price': m.group(2).strip(),
-                    'flow_in': m.group(3).strip(),
-                })
-            return results if results else [{'raw': 'no data', 'length': len(html)}]
+            # HTML 列: 序号|概念名|总成交量|涨跌幅%|总成交额|净流入|主力|上涨数|领涨股|领涨股涨%|领涨股价
+            for tr in re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL):
+                tds = re.findall(r'<td[^>]*>(.*?)</td>', tr, re.DOTALL)
+                if len(tds) >= 9:
+                    cells = [re.sub(r'<[^>]+>', '', t).strip() for t in tds]
+                    results.append({
+                        'concept': cells[1] if len(cells) > 1 else '',
+                        'chg_pct': cells[3] if len(cells) > 3 else '',
+                        'flow_in': cells[5] if len(cells) > 5 else '',
+                        'leader': cells[8] if len(cells) > 8 else '',
+                        'leader_chg': cells[9] if len(cells) > 9 else '',
+                    })
+            return results[:50]
         except Exception as e:
             return [{'error': str(e)[:60]}]
 
