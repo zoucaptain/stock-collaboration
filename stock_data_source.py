@@ -826,17 +826,17 @@ class StockData:
                 html = r.read().decode('gbk', errors='ignore')
             results = []
             # 解析 tr 里的 td
+            # HTML 实际列: 序号|板块|总成交量|涨跌幅%|总成交额|净流入|主力|上涨数|领涨股|领涨股涨%|领涨股价
             for tr in re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL):
                 tds = re.findall(r'<td[^>]*>(.*?)</td>', tr, re.DOTALL)
-                if len(tds) >= 6:
+                if len(tds) >= 9:
                     cells = [re.sub(r'<[^>]+>', '', t).strip() for t in tds]
-                    # 板块|涨跌幅|总成交额|净流入|上涨数|下跌数|领涨股|领涨股涨%
                     results.append({
                         'industry': cells[1] if len(cells) > 1 else '',
-                        'chg_pct': cells[2] if len(cells) > 2 else '',
-                        'flow_in': cells[4] if len(cells) > 4 else '',
-                        'leader': cells[7] if len(cells) > 7 else '',
-                        'leader_chg': cells[8] if len(cells) > 8 else '',
+                        'chg_pct': cells[3] if len(cells) > 3 else '',
+                        'flow_in': cells[5] if len(cells) > 5 else '',
+                        'leader': cells[8] if len(cells) > 8 else '',
+                        'leader_chg': cells[9] if len(cells) > 9 else '',
                     })
             return results[:30]  # 限制 30 个
         except Exception as e:
