@@ -657,6 +657,210 @@ class StockData:
         except Exception as e:
             return {'source': '10jqka', 'error': str(e)[:60]}
 
+    @staticmethod
+    def get_jp_kr_index_yahoo() -> dict:
+        """日韩指数实时 (雅虎 finance, 0.3-0.5s)
+
+        包含: 日经 225 (^N225), 日经 300 (^N300), KOSPI (^KS11)
+        """
+        results = {}
+        symbols = [
+            ('%5EN225', 'jp_n225', '日经225'),
+            ('%5EN300', 'jp_n300', '日经300'),
+            ('%5EKS11', 'kr_kospi', 'KOSPI'),
+        ]
+        for symbol, key, name in symbols:
+            for attempt in [1, 2]:
+                try:
+                    url = f'https://query{attempt}.finance.yahoo.com/v8/finance/chart/{symbol}'
+                    req = urllib.request.Request(url, headers={
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        'Accept': 'application/json'
+                    })
+                    with urllib.request.urlopen(req, timeout=8) as r:
+                        data = json.loads(r.read())
+                    if data.get('chart', {}).get('result'):
+                        m = data['chart']['result'][0]['meta']
+                        results[key] = {
+                            'name': name,
+                            'now': float(m.get('regularMarketPrice', 0)),
+                            'chg_pct': float(m.get('regularMarketChangePercent', 0)),
+                            'prev_close': float(m.get('chartPreviousClose', 0)),
+                            'currency': m.get('currency', ''),
+                            'time': m.get('regularMarketTime', 0),
+                            'source': 'yahoo',
+                        }
+                        break
+                except: continue
+        return results
+
+    @staticmethod
+    def get_hsi_future_yahoo() -> dict:
+        """恒生指数实时 (雅虎 finance, 0.5s)
+
+        包含: ^HSI 恒生指数 (替代 A50 期货缺口)
+        """
+        results = {}
+        for symbol, key, name in [
+            ('%5EHSI', 'hsi', '恒生指数'),
+        ]:
+            try:
+                url = f'https://query1.finance.yahoo.com/v8/finance/chart/{symbol}'
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    data = json.loads(r.read())
+                if data.get('chart', {}).get('result'):
+                    m = data['chart']['result'][0]['meta']
+                    results[key] = {
+                        'name': name,
+                        'now': float(m.get('regularMarketPrice', 0)),
+                        'chg_pct': float(m.get('regularMarketChangePercent', 0)),
+                        'prev_close': float(m.get('chartPreviousClose', 0)),
+                        'source': 'yahoo',
+                    }
+            except: pass
+        return results
+
+    @staticmethod
+    def get_a50_proxy() -> dict:
+        """A50 期货代理 (用 HSI + 美元/离岸人民币估算)
+
+        实际 A50 期货免费源未找到, 用 HSI 作为代理 (相关性高)
+        """
+        proxy = {}
+        # 1. HSI 恒生指数
+        hsi = StockData.get_hsi_future_yahoo()
+        if hsi:
+            proxy['hsi'] = hsi.get('hsi', {})
+        # 2. 美元/离岸人民币 (新浪 - 字段 [0]=时间 [1]=现价 [2]=开盘 [3]=昨收 [4]=涨跌 bp)
+        try:
+            url = 'https://hq.sinajs.cn/list=fx_susdcny'
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://finance.sina.com.cn/'})
+            with urllib.request.urlopen(req, timeout=8) as r:
+                data = r.read().decode('gbk', errors='ignore')
+            m = re.search(r'"([^"]+)"', data)
+            if m:
+                p = m.group(1).split(',')
+                if len(p) >= 4:
+                    now = float(p[1])
+                    prev = float(p[3])
+                    chg_pct = (now - prev) / prev * 100 if prev else 0
+                    proxy['usd_cnh'] = {
+                        'name': '美元/离岸人民币',
+                        'now': now,
+                        'chg_pct': chg_pct,
+                    }
+        except: pass
+        proxy['note'] = 'A50 期货免费实时源未找到, HSI 作为代理'
+        return proxy
+
+    @staticmethod
+    def get_industry_summary_ths() -> list:
+        """同花顺申万行业 90 行 (akshare, 0.3s)
+
+        返回每行业: 涨跌幅/总成交量/总成交额/净流入/上涨家数/下跌家数/领涨股
+        """
+        try:
+            import akshare as ak
+            df = ak.stock_board_industry_summary_ths()
+            results = []
+            if df is not None and len(df) > 0:
+                for _, r in df.iterrows():
+                    results.append({
+                        'name': r.get('板块', ''),
+                        'chg_pct': float(r.get('涨跌幅', 0)),
+                        'volume': float(r.get('总成交量', 0)),
+                        'amount': float(r.get('总成交额', 0)),
+                        'flow_in': float(r.get('净流入', 0)),
+                        'up_count': int(r.get('上涨家数', 0)),
+                        'down_count': int(r.get('下跌家数', 0)),
+                        'leader': r.get('领涨股', ''),
+                        'leader_price': float(r.get('领涨股-最新价', 0)),
+                        'leader_chg': float(r.get('领涨股-涨跌幅', 0)),
+                    })
+            return results
+        except Exception as e:
+            raise DataError(f"申万行业失败: {e}")
+
+    @staticmethod
+    def get_concept_summary_ths() -> list:
+        """同花顺概念板块 (akshare, 0.7s)
+
+        返回每概念: 涨跌幅/净流入/领涨股
+        注: stock_board_concept_summary_ths 返回的是"驱动事件", 用 stock_board_concept_spot_em 或 ths 的实时版
+        """
+        try:
+            import akshare as ak
+            # 试 akshare 的 ths 概念
+            df = None
+            for fn_name in ['stock_board_concept_spot_em', 'stock_board_concept_index_ths', 'stock_board_concept_summary_ths']:
+                try:
+                    fn = getattr(ak, fn_name, None)
+                    if fn is None: continue
+                    df_test = fn()
+                    if df_test is not None and len(df_test) > 0 and '涨跌幅' in df_test.columns:
+                        df = df_test
+                        break
+                except: continue
+            results = []
+            if df is not None and len(df) > 0:
+                for _, r in df.iterrows():
+                    results.append({
+                        'name': r.get('板块名称', r.get('概念', r.get('名称', r.get('板块', '')))),
+                        'chg_pct': float(r.get('涨跌幅', 0)),
+                        'flow_in': float(r.get('净流入', r.get('资金净流入', 0))),
+                        'leader': r.get('领涨股', ''),
+                        'leader_chg': float(r.get('领涨股-涨跌幅', r.get('领涨股涨跌幅', 0))),
+                    })
+            return results
+        except Exception as e:
+            raise DataError(f"概念板块失败: {e}")
+
+    @staticmethod
+    def get_fund_flow_10jqka_industry() -> list:
+        """同花顺行业资金流 (HTML 抓取)"""
+        try:
+            url = 'http://data.10jqka.com.cn/funds/hyzjl/'
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=8) as r:
+                html = r.read().decode('gbk', errors='ignore')
+            results = []
+            # 解析 tr 里的 td
+            for tr in re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL):
+                tds = re.findall(r'<td[^>]*>(.*?)</td>', tr, re.DOTALL)
+                if len(tds) >= 6:
+                    cells = [re.sub(r'<[^>]+>', '', t).strip() for t in tds]
+                    # 板块|涨跌幅|总成交额|净流入|上涨数|下跌数|领涨股|领涨股涨%
+                    results.append({
+                        'industry': cells[1] if len(cells) > 1 else '',
+                        'chg_pct': cells[2] if len(cells) > 2 else '',
+                        'flow_in': cells[4] if len(cells) > 4 else '',
+                        'leader': cells[7] if len(cells) > 7 else '',
+                        'leader_chg': cells[8] if len(cells) > 8 else '',
+                    })
+            return results[:30]  # 限制 30 个
+        except Exception as e:
+            return [{'error': str(e)[:60]}]
+
+    @staticmethod
+    def get_fund_flow_10jqka_concept() -> list:
+        """同花顺概念资金流 (HTML 抓取)"""
+        try:
+            url = 'http://data.10jqka.com.cn/funds/gnzjl/'
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=8) as r:
+                html = r.read().decode('gbk', errors='ignore')
+            results = []
+            for m in re.finditer(r'class="J_concept"[^>]*>([^<]+)</[^>]+>[^<]*<[^>]+>([^<]+)</[^>]+>[^<]+<[^>]+>([^<]+)净流入[^<]*</[^>]+>', html):
+                results.append({
+                    'concept': m.group(1).strip(),
+                    'price': m.group(2).strip(),
+                    'flow_in': m.group(3).strip(),
+                })
+            return results if results else [{'raw': 'no data', 'length': len(html)}]
+        except Exception as e:
+            return [{'error': str(e)[:60]}]
+
 
 
 
