@@ -78,6 +78,13 @@
       "is_industry_leader": true,
       "is_exception": false,
       "note": "西南黄金次新龙头 (2023 上市), 4 条规则全过: 价 42.96 (<50) / 市值 180 亿 (<200) / 30d 震幅 2.21 元 (>1) / 细分龙头"
+    },
+    {
+      "code": "000099", "name": "中信海直", "industry": "通用航空",
+      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "is_industry_leader": true,
+      "is_exception": true,
+      "exception_reason": "**震幅豁免**: 5 条规则 4/5 通过, 30d 震幅 0.34 元 < 1 元 (差 0.66 元, 缺口 66%), 但用户指定加入, 中国通用航空绝对龙头 (中信集团旗下, 海上石油直升机服务), 今天涨停 +9.99%, 90d 位 95.3% 顶部"
     }
   ]
 }
