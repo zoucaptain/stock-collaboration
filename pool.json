@@ -16,6 +16,27 @@
       "board_rule_added": "2026-10-16 13:40 由用户手动加入, 原因: 主板股票流动性更好, 估值更稳定, 适合长期观察"
     },
     "observation_frequency": "每个交易日 15:30 收盘后",
+    "amplitude_tier_system": {
+      "description": "30d 平均震幅分 3 档: 越大近期越有炒的价值",
+      "tiers": {
+        "strong": {
+          "label": "🟢 强",
+          "range": "> 1 元",
+          "meaning": "近期强活跃, 有炒作价值, 短线机会多"
+        },
+        "medium": {
+          "label": "🟡 中",
+          "range": "0.5 - 1 元",
+          "meaning": "中等活跃, 观察为主"
+        },
+        "weak": {
+          "label": "🔴 弱",
+          "range": "< 0.5 元",
+          "meaning": "低活跃, 短线机会少, 长期持有可考虑"
+        }
+      },
+      "added_at": "2026-10-16 15:15"
+    },
     "output_metrics": [
       "实时价/涨%/换手/量比",
       "MA5/10/20/60",
