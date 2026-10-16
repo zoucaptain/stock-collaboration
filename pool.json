@@ -75,6 +75,13 @@
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "市值 231.2 亿, 超 200 亿限制 31.2 亿 (13.2%), 但用户指定加入, 军工装备细分龙头, 按中国神华豁免模板保留"
+    },
+    {
+      "code": "001337", "name": "四川黄金", "industry": "黄金",
+      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "is_industry_leader": true,
+      "is_exception": false,
+      "note": "西南黄金次新龙头 (2023 上市), 4 条规则全过: 价 42.96 (<50) / 市值 180 亿 (<200) / 30d 震幅 2.21 元 (>1) / 细分龙头"
     }
   ]
 }
