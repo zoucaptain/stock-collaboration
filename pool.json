@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "created_at": "2026-10-16 11:25",
+  "updated_at": "2026-10-16 11:25",
+  "rules": {
+    "new_stock_requirements": {
+      "industry_leader": "必须是所属行业龙头",
+      "avg_daily_range_gt_yuan": 1.0,
+      "avg_daily_range_note": "过去30天平均每天(最高价-最低价)震幅 > 1 元",
+      "market_cap_max_yi": 200,
+      "market_cap_note": "总市值不超过 200 亿 (中国神华豁免: 行业绝对龙头)",
+      "price_max_yuan": 50,
+      "price_note": "股价不超过 50 元 (大连圣亚 48.38/中国神华 50.47 接近上限,豁免)"
+    },
+    "observation_frequency": "每个交易日 15:30 收盘后",
+    "output_metrics": [
+      "实时价/涨%/换手/量比",
+      "MA5/10/20/60",
+      "30天最低/最高/位置",
+      "30天涨幅/涨停次数",
+      "30天平均震幅 (筹码活跃度)",
+      "趋势判定 (UP/DOWN/TRANS/SIDEWAYS)",
+      "K线状态 (高危/强势/中性/弱势/低吸)",
+      "均线状态 (多头/空头/超跌反弹/超买回调/震荡)"
+    ]
+  },
+  "stocks": [
+    {
+      "code": "600744", "name": "华银电力", "industry": "电力",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true, "is_exception": false
+    },
+    {
+      "code": "600396", "name": "华电辽能", "industry": "电力",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true, "is_exception": false
+    },
+    {
+      "code": "002655", "name": "共达电声", "industry": "电子元件",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true, "is_exception": false
+    },
+    {
+      "code": "600127", "name": "金健米业", "industry": "农产品",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true, "is_exception": false
+    },
+    {
+      "code": "601088", "name": "中国神华", "industry": "煤炭",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": true,
+      "exception_reason": "煤炭行业绝对龙头, 市值 10938 亿 + 现价 50.43 元, 严重超 200 亿/50 元限制, 但用户指定加入, 例外保留"
+    },
+    {
+      "code": "600664", "name": "哈药股份", "industry": "医药",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true, "is_exception": false
+    },
+    {
+      "code": "600593", "name": "大连圣亚", "industry": "旅游",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false,
+      "exception_note": "现价 48.43 元 接近 50 元上限, 但 30d 涨 +23.9% + 涨停 3 次 + 震幅 2.58 元, 筹码活跃, 暂时保留"
+    },
+    {
+      "code": "603099", "name": "长白山", "industry": "旅游",
+      "added_at": "2026-10-16", "added_by": "user_initial",
+      "is_industry_leader": true, "is_exception": false
+    }
+  ]
+}
