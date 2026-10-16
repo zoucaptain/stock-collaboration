@@ -784,28 +784,33 @@ class StockData:
 
     @staticmethod
     def get_concept_summary_ths() -> list:
-        """同花顺概念板块 (akshare stock_fund_flow_concept, 0.5s, 387 行)
+        """东财概念板块 (akshare stock_board_concept_name_em, 0.5-1s, ~200 个真实概念)
 
-        返回每概念: 涨跌幅/流入/流出/净额/公司家数
-        注: 该接口实际是行业资金流全量版, 名字叫 concept 但内容含行业
+        返回每概念: 涨跌幅/总市值/换手/上涨家数/下跌家数/领涨股/领涨股涨跌幅
+        注: 这是真正的"概念板块" (题材/事件), 不是行业.
+             stock_fund_flow_concept 名字误导, 实际是行业资金流, 已弃用.
         """
         try:
             import akshare as ak
-            df = ak.stock_fund_flow_concept()
+            df = ak.stock_board_concept_name_em()
             results = []
             if df is not None and len(df) > 0:
                 for _, r in df.iterrows():
                     results.append({
-                        'name': r.get('行业', ''),
-                        'chg_pct': float(r.get('行业-涨跌幅', 0)),
-                        'flow_in': float(r.get('流入资金', 0)),
-                        'flow_out': float(r.get('流出资金', 0)),
-                        'net_flow': float(r.get('净额', 0)),
-                        'company_count': int(r.get('公司家数', 0)),
+                        'name': r.get('板块名称', ''),
+                        'code': r.get('板块代码', ''),
+                        'chg_pct': float(r.get('涨跌幅', 0)),
+                        'total_mcap_yi': float(r.get('总市值', 0)) / 1e8,  # 元转亿
+                        'turnover': float(r.get('换手率', 0)),
+                        'up_count': int(r.get('上涨家数', 0)),
+                        'down_count': int(r.get('下跌家数', 0)),
+                        'leader': r.get('领涨股票', ''),
+                        'leader_chg': float(r.get('领涨股票-涨跌幅', 0)),
+                        'rank': int(r.get('排名', 0)),
                     })
             return results
         except Exception as e:
-            raise DataError(f"概念板块失败: {e}")
+            raise DataError(f"东财概念板块失败: {e}")
 
     @staticmethod
     def get_fund_flow_10jqka_industry() -> list:
