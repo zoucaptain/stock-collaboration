@@ -120,6 +120,13 @@
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**震幅豁免**: 5 条规则 4/5 通过, 30d 震幅 0.64 元 < 1 元 (差 0.36, 缺口 36%), 但用户指定加入, 西北白酒龙头 (甘肃), 30d 涨停 3 次 (妖性), 25.3 亿低市值, 90d 涨 +42.7% 顶部, 今天 +6.81%"
+    },
+    {
+      "code": "600199", "name": "金种子酒", "industry": "白酒+安徽龙头",
+      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "is_industry_leader": true,
+      "is_exception": true,
+      "exception_reason": "**震幅豁免**: 5 条规则 4/5 通过, 30d 震幅 0.31 元 < 1 元 (差 0.69, 缺口 69%), 但用户指定加入, 安徽白酒龙头 (业绩反转), 30d 涨停 1 次, 53.4 亿低市值, 90d 涨 +25.8% 顶部 (90d 位 81.9%), 今天 +4.77%"
     }
   ]
 }
