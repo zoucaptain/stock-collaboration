@@ -10,7 +10,10 @@
       "market_cap_max_yi": 200,
       "market_cap_note": "总市值不超过 200 亿 (中国神华豁免: 行业绝对龙头)",
       "price_max_yuan": 50,
-      "price_note": "股价不超过 50 元 (大连圣亚 48.38/中国神华 50.47 接近上限,豁免)"
+      "price_note": "股价不超过 50 元 (大连圣亚 48.38/中国神华 50.47 接近上限,豁免)",
+      "board_main_only": "**必须是 A 股主板** (沪市主板 600/601/603/605 + 深市主板 000/001/002)",
+      "board_excluded": "**排除板块**: 创业板 300xxx / 科创板 688xxx / 北交所 8xxxxx / 920xxxx",
+      "board_rule_added": "2026-10-16 13:40 由用户手动加入, 原因: 主板股票流动性更好, 估值更稳定, 适合长期观察"
     },
     "observation_frequency": "每个交易日 15:30 收盘后",
     "output_metrics": [
