@@ -68,6 +68,13 @@
       "code": "603099", "name": "长白山", "industry": "旅游",
       "added_at": "2026-10-16", "added_by": "user_initial",
       "is_industry_leader": true, "is_exception": false
+    },
+    {
+      "code": "601606", "name": "长城军工", "industry": "军工",
+      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "is_industry_leader": true,
+      "is_exception": true,
+      "exception_reason": "市值 231.2 亿, 超 200 亿限制 31.2 亿 (13.2%), 但用户指定加入, 军工装备细分龙头, 按中国神华豁免模板保留"
     }
   ]
 }
