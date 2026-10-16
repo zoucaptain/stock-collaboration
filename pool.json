@@ -46,13 +46,6 @@
       "is_industry_leader": true, "is_exception": false
     },
     {
-      "code": "601088", "name": "中国神华", "industry": "煤炭",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true,
-      "is_exception": true,
-      "exception_reason": "煤炭行业绝对龙头, 市值 10938 亿 + 现价 50.43 元, 严重超 200 亿/50 元限制, 但用户指定加入, 例外保留"
-    },
-    {
       "code": "600664", "name": "哈药股份", "industry": "医药",
       "added_at": "2026-10-16", "added_by": "user_initial",
       "is_industry_leader": true, "is_exception": false
