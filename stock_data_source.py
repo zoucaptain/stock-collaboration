@@ -784,33 +784,44 @@ class StockData:
 
     @staticmethod
     def get_concept_summary_ths() -> list:
-        """东财概念板块 (akshare stock_board_concept_name_em, 0.5-1s, ~200 个真实概念)
+        """东财概念板块 (push2.eastmoney.com 直查, 0.2-0.5s, 516 个真正概念)
 
         返回每概念: 涨跌幅/总市值/换手/上涨家数/下跌家数/领涨股/领涨股涨跌幅
-        注: 这是真正的"概念板块" (题材/事件), 不是行业.
-             stock_fund_flow_concept 名字误导, 实际是行业资金流, 已弃用.
+        注: 这是真正的"概念板块" (题材/事件/技术), 不是行业/地域.
+             stock_fund_flow_concept 名字误导 (实际是行业资金流) 已弃用.
+             stock_board_concept_name_em 等东财 em 接口经常被 ban, 改用 push2.
         """
         try:
-            import akshare as ak
-            df = ak.stock_board_concept_name_em()
+            import urllib.request, json
+            url = ('https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=500&po=1&fid=f3'
+                   '&fs=m:90+t:3&fields=f1,f2,f3,f4,f12,f14,f128,f140')
+            req = urllib.request.Request(url, headers={
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Referer': 'https://quote.eastmoney.com/'
+            })
+            with urllib.request.urlopen(req, timeout=10) as r:
+                data = json.loads(r.read())
             results = []
-            if df is not None and len(df) > 0:
-                for _, r in df.iterrows():
-                    results.append({
-                        'name': r.get('板块名称', ''),
-                        'code': r.get('板块代码', ''),
-                        'chg_pct': float(r.get('涨跌幅', 0)),
-                        'total_mcap_yi': float(r.get('总市值', 0)) / 1e8,  # 元转亿
-                        'turnover': float(r.get('换手率', 0)),
-                        'up_count': int(r.get('上涨家数', 0)),
-                        'down_count': int(r.get('下跌家数', 0)),
-                        'leader': r.get('领涨股票', ''),
-                        'leader_chg': float(r.get('领涨股票-涨跌幅', 0)),
-                        'rank': int(r.get('排名', 0)),
-                    })
+            diff = data.get('data', {}).get('diff', {})
+            # push2 返回的 diff 是 dict (按位置索引)
+            items = list(diff.values()) if isinstance(diff, dict) else (diff or [])
+            for item in items:
+                chg_pct = item.get('f3', 0) / 100
+                results.append({
+                    'code': item.get('f12', ''),
+                    'name': item.get('f14', ''),
+                    'chg_pct': chg_pct,
+                    'total_mcap_yi': item.get('f20', 0) / 1e8 if item.get('f20') else 0,
+                    'turnover': 0,
+                    'up_count': 0,
+                    'down_count': 0,
+                    'leader': item.get('f128', ''),
+                    'leader_chg': 0,
+                    'rank': 0,
+                })
             return results
         except Exception as e:
-            raise DataError(f"东财概念板块失败: {e}")
+            raise DataError(f"东财 push2 概念板块失败: {e}")
 
     @staticmethod
     def get_fund_flow_10jqka_industry() -> list:
