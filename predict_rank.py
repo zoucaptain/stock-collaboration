@@ -132,6 +132,33 @@ def build_latest_features(pool, feats, meta):
     return rows
 
 
+def _last_saved_rank():
+    """取最近一次 rank 存档 (数据源全挂时的降级回退)"""
+    if not os.path.isdir(OUTDIR):
+        return None
+    files = sorted((f for f in os.listdir(OUTDIR)
+                    if f.startswith('rank_') and f.endswith('.json')))
+    if not files:
+        return None
+    try:
+        with open(os.path.join(OUTDIR, files[-1]), encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def _print_saved(last):
+    oos = last.get('model_oos', {})
+    print(f"存档基准日: {last.get('date')} | 生成于 {last.get('generated')}")
+    if oos:
+        print(f"模型 OOS: Top1 次日上涨 {oos.get('win', 0)*100:.1f}% | "
+              f"Top1 涨5% {oos.get('hi5', 0)*100:.1f}% | "
+              f"池内基准 {oos.get('base_up', 0)*100:.1f}%")
+    for r in last.get('rank', [])[:3]:
+        print(f"  {r['rank']}. {r['name']} ({r['code']}) 价 {r['px']:.2f} | "
+              f"模型分 {r['prob']*100:.1f}%")
+
+
 def main():
     pool = _pool_from_json()
     print(f'股票池 {len(pool)} 只')
@@ -141,7 +168,15 @@ def main():
 
     rows = build_latest_features(pool, feats, meta)
     if not rows:
-        print('❌ 取数失败'); return
+        # 降级: 三个数据源全挂 -> 用上次存档, 明确标注数据日期 (2026-10-22 加)
+        last = _last_saved_rank()
+        if last:
+            print('⚠️ 全部数据源取数失败, 使用上次存档 (数据日期 '
+                  f"{last['date']}), 非最新行情")
+            _print_saved(last)
+            return
+        print('❌ 取数失败且无存档可回退')
+        return
     X = np.array([[r[2].get(f, 0.0) for f in FEATS] for r in rows], dtype=np.float64)
     Xs = (X - mu) / sd
     prob = predict_proba(Xs, w0)
