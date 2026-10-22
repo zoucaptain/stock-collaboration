@@ -1,0 +1,17 @@
+{
+ "rolling": [],
+ "degraded_streak": 0,
+ "rule_locked": false,
+ "refits_today": [],
+ "active_rule": "c5ge15 AND luge2",
+ "history": [
+  {
+   "at": "2026-10-22 14:26:19",
+   "from": "c5ge15 AND luge2",
+   "to": "c5ge15 AND luge2",
+   "oos": 0.9047619047619048,
+   "n": 42,
+   "reason": "滚动准确率 0.0% < 70%"
+  }
+ ]
+}
