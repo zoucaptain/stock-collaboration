@@ -36,17 +36,82 @@ PRED_DIR = os.path.join(REPO, 'predictions')
 LOG_FILE = os.path.join(REPO, 'accuracy_log.md')
 RULE_FILE = os.path.join(REPO, 'predict_rule.json')
 
-POOL = [
+def _pool_from_json():
+    """从 pool.json 读股票池 (唯一真相源) — 2026-10-22 修: 原来硬编码 14 只,
+    加了新股票 (大洋电机 002249) 忘了同步, 导致预测漏票。"""
+    for p in (r'C:\Users\yanyan.zou\stock-collaboration\pool.json',
+              os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           '..', '..', '..', 'stock-collaboration', 'pool.json')):
+        try:
+            with open(p, encoding='utf-8') as f:
+                d = json.load(f)
+            out = [(s['code'], s['name']) for s in d.get('stocks', [])]
+            if out:
+                return out
+        except Exception:
+            pass
+    return []
+
+
+POOL = _pool_from_json() or [
     ('002085', '万丰奥威'), ('600593', '大连圣亚'), ('600127', '金健米业'),
     ('002655', '共达电声'), ('002929', '润建股份'), ('600744', '华银电力'),
     ('600396', '华电辽能'), ('603099', '长白山'), ('601606', '长城军工'),
     ('001337', '四川黄金'), ('000099', '中信海直'), ('000995', '皇台酒业'),
-    ('600199', '金种子酒'), ('600664', '哈药股份'),
+    ('600199', '金种子酒'), ('600664', '哈药股份'), ('002249', '大洋电机'),
 ]
 TARGET = 0.05
 
 
 # ---------------------------------------------------------------- 数据
+def sina_kline(code, days=600):
+    """新浪日K fallback (2026-10-22 加: 腾讯开始限流 HTTP 501)
+    注意: 新浪返回**不复权**价, 与腾讯 qfq 口径不同。
+    处理: 用 东财 fqt=1 拿前复权, 失败则用新浪原值 + 标注 (特征多为相对值, 影响有限)"""
+    sym = ('sh' if code.startswith('6') else 'sz') + code
+    # 优先: 东财前复权 (与腾讯 qfq 同口径)
+    for host in ('push2his.eastmoney.com', 'push2his.eastmoney.com',
+                 '43.push2his.eastmoney.com'):
+        try:
+            secid = ('1.' if code.startswith('6') else '0.') + code
+            u = (f'https://{host}/api/qt/stock/kline/get?secid={secid}'
+                 f'&fields1=f1,f2,f3,f4,f5,f6&fields2=f51,f52,f53,f54,f55,f56,f57'
+                 f'&klt=101&fqt=1&beg=0&end=20500101&lmt={days}')
+            req = urllib.request.Request(u, headers={'User-Agent': 'Mozilla/5.0'})
+            d = json.loads(urllib.request.urlopen(req, timeout=20).read())
+            kls = (d.get('data') or {}).get('klines') or []
+            out = []
+            for x in kls:
+                p = x.split(',')
+                out.append({'d': p[0], 'o': float(p[1]), 'c': float(p[2]),
+                            'h': float(p[3]), 'l': float(p[4]), 'v': float(p[5])})
+            if len(out) > 100:
+                return out
+        except Exception:
+            pass
+    # 退: 新浪原值
+    u = (f'https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/'
+         f'CN_MarketData.getKLineData?symbol={sym}&scale=240&ma=no&datalen={days}')
+    try:
+        req = urllib.request.Request(u, headers={
+            'User-Agent': 'Mozilla/5.0', 'Referer': 'https://finance.sina.com.cn'})
+        txt = urllib.request.urlopen(req, timeout=20).read().decode('utf-8', 'ignore')
+        data = json.loads(txt)
+        out = []
+        for x in data:
+            try:
+                out.append({'d': x['day'][:10], 'o': float(x['open']),
+                            'c': float(x['close']), 'h': float(x['high']),
+                            'l': float(x['low']), 'v': float(x['volume'])})
+            except Exception:
+                pass
+        if out:
+            return out
+    except Exception:
+        pass
+    return []
+
+
 def tx_kline(code, days=260):
     p = 'sh' if code.startswith('6') else 'sz'
     for u in (f'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={p}{code},day,,,{days},qfq',
@@ -66,7 +131,7 @@ def tx_kline(code, days=260):
                 return out
         except Exception:
             pass
-    return []
+    return sina_kline(code, max(days, 600))
 
 
 def features(k, i):
