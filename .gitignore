@@ -2,3 +2,4 @@
 .cron/
 # .env 含可能的 token
 .env
+.cache/

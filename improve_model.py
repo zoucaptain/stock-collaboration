@@ -32,12 +32,13 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from predict_next_day import _pool_from_json, sina_kline
 
-CACHE = os.path.abspath(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), '..', 'cache', 'scratch',
-    'improve_data.json'))
-MODEL = os.path.abspath(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), '..', 'cache', 'scratch',
-    'improve_model.json'))
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO_DIR = r'C:\Users\yanyan.zou\stock-collaboration'
+# scratch 目录 24h 空闲会被清理 -> 模型/数据缓存放这里会被删掉 (2026-10-26 修复)
+DURABLE = os.path.join(REPO_DIR, '.cache')
+CACHE = os.path.join(DURABLE, 'improve_data.json')
+# 模型以仓库内提交版为唯一真相源 (scratch 副本已被清理过一次)
+MODEL = os.path.join(REPO_DIR, 'improve_model.json')
 DAYS = 1200
 
 
@@ -104,25 +105,42 @@ ELASTIC = ['el_c5', 'el_lu', 'el_vr', 'el_score', 'el_ma20gap', 'el_cpos']
 SENTI = ['mkt_upratio', 'mkt_limitup', 'mkt_mean', 'mkt_range', 'mkt_idx_up']
 
 
+def _clean_bars(k):
+    """剔除脏 bar: 前复权后价格 <= 0 (老股历史除权导致负价/零价)。
+    不剔除会让 features_from 里 c[i] 为 0 时除零崩溃 (2026-10-26 修复)。
+    只影响远古脏 bar, 近端窗口特征不变。"""
+    out = []
+    for x in k:
+        try:
+            if x['c'] > 0 and x['h'] > 0 and x['l'] > 0:
+                out.append(x)
+        except (KeyError, TypeError):
+            continue
+    return out
+
+
 def build():
     if os.path.exists(CACHE):
         with open(CACHE, encoding='utf-8') as f:
             b = json.load(f)
+        for code, blob in b['klines'].items():
+            blob['k'] = _clean_bars(blob['k'])
         return b['klines'], b['index']
     pool = _pool_from_json()
     print(f'股票池 {len(pool)} 只, 取 {DAYS} 天历史...')
     klines = {}
     for code, name in pool:
-        k = tx_kline_long(code)
+        k = _clean_bars(tx_kline_long(code))
         print(f'  {code} {name}: {len(k)} 根')
         if len(k) > 200:
             klines[code] = {'name': name, 'k': k}
     index = {}
     for code, tag in (('sh000001', 'sh'), ('sz399006', 'cyb')):
-        k = tx_index(code)
+        k = _clean_bars(tx_index(code))
         print(f'  指数 {code}: {len(k)} 根')
         if len(k) > 200:
             index[tag] = {x['d']: x for x in k}
+    os.makedirs(DURABLE, exist_ok=True)
     with open(CACHE, 'w', encoding='utf-8') as f:
         json.dump({'klines': klines, 'index': index}, f)
     return klines, index
@@ -185,7 +203,7 @@ def features_from(klines, index, include_last=False):
                 'gap': (o[i] / c[i - 1] - 1) * 100,
                 'lu': lb, 'updays': up, 'downdays': dn,
                 'px': c[i],
-                'next_high_ret': (h[i + 1] / c[i] - 1) if i + 1 < len(k) else 0.0})
+                'next_high_ret': (h[i + 1] / c[i] - 1) if (i + 1 < len(k) and c[i] > 0) else 0.0})
     # ---- 弹性因子 (排序用)
     for r in rows:
         r['el_c5'] = r['c5']

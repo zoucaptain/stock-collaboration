@@ -1,5 +1,7 @@
 {
- "rolling": [],
+ "rolling": [
+  1
+ ],
  "degraded_streak": 0,
  "rule_locked": false,
  "refits_today": [],
