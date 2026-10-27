@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "created_at": "2026-10-16 11:25",
-  "updated_at": "2026-10-16 11:25",
+  "updated_at": "2026-10-27 15:53",
   "rules": {
     "new_stock_requirements": {
       "industry_leader": "必须是所属行业龙头",
@@ -50,97 +50,159 @@
   },
   "stocks": [
     {
-      "code": "600744", "name": "华银电力", "industry": "电力",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true, "is_exception": false
+      "code": "600744",
+      "name": "华银电力",
+      "industry": "电力",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false
     },
     {
-      "code": "600396", "name": "华电辽能", "industry": "电力",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true, "is_exception": false
+      "code": "600396",
+      "name": "华电辽能",
+      "industry": "电力",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false
     },
     {
-      "code": "002655", "name": "共达电声", "industry": "电子元件",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true, "is_exception": false
+      "code": "002655",
+      "name": "共达电声",
+      "industry": "电子元件",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false
     },
     {
-      "code": "600127", "name": "金健米业", "industry": "农产品",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true, "is_exception": false
+      "code": "600127",
+      "name": "金健米业",
+      "industry": "农产品",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false
     },
     {
-      "code": "600664", "name": "哈药股份", "industry": "医药",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true, "is_exception": false
+      "code": "600664",
+      "name": "哈药股份",
+      "industry": "医药",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false
     },
     {
-      "code": "600593", "name": "大连圣亚", "industry": "旅游",
-      "added_at": "2026-10-16", "added_by": "user_initial",
+      "code": "600593",
+      "name": "大连圣亚",
+      "industry": "旅游",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
       "is_industry_leader": true,
       "is_exception": false,
       "exception_note": "现价 48.43 元 接近 50 元上限, 但 30d 涨 +23.9% + 涨停 3 次 + 震幅 2.58 元, 筹码活跃, 暂时保留"
     },
     {
-      "code": "603099", "name": "长白山", "industry": "旅游",
-      "added_at": "2026-10-16", "added_by": "user_initial",
-      "is_industry_leader": true, "is_exception": false
+      "code": "603099",
+      "name": "长白山",
+      "industry": "旅游",
+      "added_at": "2026-10-16",
+      "added_by": "user_initial",
+      "is_industry_leader": true,
+      "is_exception": false
     },
     {
-      "code": "601606", "name": "长城军工", "industry": "军工",
-      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "code": "601606",
+      "name": "长城军工",
+      "industry": "军工",
+      "added_at": "2026-10-16",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "市值 231.2 亿, 超 200 亿限制 31.2 亿 (13.2%), 但用户指定加入, 军工装备细分龙头, 按中国神华豁免模板保留"
     },
     {
-      "code": "001337", "name": "四川黄金", "industry": "黄金",
-      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "code": "001337",
+      "name": "四川黄金",
+      "industry": "黄金",
+      "added_at": "2026-10-16",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": false,
       "note": "西南黄金次新龙头 (2023 上市), 4 条规则全过: 价 42.96 (<50) / 市值 180 亿 (<200) / 30d 震幅 2.21 元 (>1) / 细分龙头"
     },
     {
-      "code": "000099", "name": "中信海直", "industry": "通用航空",
-      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "code": "000099",
+      "name": "中信海直",
+      "industry": "通用航空",
+      "added_at": "2026-10-16",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**震幅豁免**: 5 条规则 4/5 通过, 30d 震幅 0.34 元 < 1 元 (差 0.66 元, 缺口 66%), 但用户指定加入, 中国通用航空绝对龙头 (中信集团旗下, 海上石油直升机服务), 今天涨停 +9.99%, 90d 位 95.3% 顶部"
     },
     {
-      "code": "002085", "name": "万丰奥威", "industry": "通用航空+eVTOL+碳纤维",
-      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "code": "002085",
+      "name": "万丰奥威",
+      "industry": "通用航空+eVTOL+碳纤维",
+      "added_at": "2026-10-16",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**双项豁免**: 5 条规则 3/5 通过, (1) 30d 震幅 0.24 元 < 1 元 (差 0.76, 缺口 76%); (2) 市值 210.4 亿 > 200 亿 (差 10 亿, 超 5.2%); 但用户指定加入, 4 大概念领涨股 (碳纤维/通用航空/飞行汽车(eVTOL)/汽车一体化压铸), 今天涨停 +9.99%, 90d 位 48.7% 中位"
     },
     {
-      "code": "000995", "name": "皇台酒业", "industry": "白酒+西北龙头",
-      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "code": "000995",
+      "name": "皇台酒业",
+      "industry": "白酒+西北龙头",
+      "added_at": "2026-10-16",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**震幅豁免**: 5 条规则 4/5 通过, 30d 震幅 0.64 元 < 1 元 (差 0.36, 缺口 36%), 但用户指定加入, 西北白酒龙头 (甘肃), 30d 涨停 3 次 (妖性), 25.3 亿低市值, 90d 涨 +42.7% 顶部, 今天 +6.81%"
     },
     {
-      "code": "600199", "name": "金种子酒", "industry": "白酒+安徽龙头",
-      "added_at": "2026-10-16", "added_by": "user_manual_add",
+      "code": "600199",
+      "name": "金种子酒",
+      "industry": "白酒+安徽龙头",
+      "added_at": "2026-10-16",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**震幅豁免**: 5 条规则 4/5 通过, 30d 震幅 0.31 元 < 1 元 (差 0.69, 缺口 69%), 但用户指定加入, 安徽白酒龙头 (业绩反转), 30d 涨停 1 次, 53.4 亿低市值, 90d 涨 +25.8% 顶部 (90d 位 81.9%), 今天 +4.77%"
     },
     {
-      "code": "002929", "name": "润建股份", "industry": "通信网络管维+算力+AI",
-      "added_at": "2026-10-21", "added_by": "user_manual_add",
+      "code": "002929",
+      "name": "润建股份",
+      "industry": "通信网络管维+算力+AI",
+      "added_at": "2026-10-21",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**价格豁免 (小豁免 12.3%)**: 5 条规则 4/5 通过, 股价 56.14 元 > 50 元上限 (超 6.14 元, 缺口 12.3%), 但用户指定加入。行业龙头地位 = 通信网络管维领域规模最大的民营企业 (2026 半年报原文) + 中国移动 A 级供应商 + 中国铁塔五星级服务商 + 中国软件百强 + 中国服务业 500 强。30d 震幅 2.08 元 (>1) / 市值 161 亿 (<200) / 深市主板 002 全部通过。风险: 3 连板 (10/19~10/21), 7d +31.3%, 30d 位 100% 顶格, PE 50194, 2026H1 营收 37.56 亿 (-22.8%), 算力业务毛利率仅 6.97%, 经营现金流 -28.76 亿"
     },
     {
-      "code": "002249", "name": "大洋电机", "industry": "电机+具身智能关节模组+数据中心散热",
-      "added_at": "2026-10-22", "added_by": "user_manual_add",
+      "code": "002249",
+      "name": "大洋电机",
+      "industry": "电机+具身智能关节模组+数据中心散热",
+      "added_at": "2026-10-22",
+      "added_by": "user_manual_add",
       "is_industry_leader": true,
       "is_exception": true,
       "exception_reason": "**震幅豁免 (大豁免 83%)**: 5 条规则 4/5 通过, 30d 震幅仅 0.17 元 < 1 元 (缺 0.83 元, 缺口 83%, 对比中信海直 66% / 万丰奥威 76% / 金种子酒 69%)。行业龙头地位 = 电机龙头, 2026 半年报原文: '致力于成为全球电机及驱动控制系统绿色智能解决方案领域的卓越供应商', 两大事业部 BHM (建筑及家居电器电机 33.68 亿占营收 54.5%) + 车辆事业集团 EVBG (起发电机 17.86 亿 + 新能源动力总成 9.76 亿 +34.56%)。30d 震幅 0.17 / 市值 174.7 亿 (<200) / 股价 7.06 (<50) / 深市主板 002 通过。⚠️ 风险画像: 今日 (10/22) 涨停 +9.97% 首次放量, 此前 30 天日振幅仅 0.08~0.24 元属沉睡股, 电机Ⅱ 板块今日 4 只集体涨停 (兆威机电/大洋电机/安乃达/华阳智能); 2026H1 归母净利 4.18 亿 (-30.51%), Q2 单季 -62.5%; 氢能与具身智能业务'尚未形成销售收入' (半年报原文); PE 极高。操作: 入池观察, **不追高**"
+    },
+    {
+      "code": "600838",
+      "name": "上海九百",
+      "industry": "一般零售+静安寺商圈",
+      "added_at": "2026-10-27",
+      "added_by": "user_manual_add",
+      "is_industry_leader": true,
+      "is_exception": true,
+      "exception_reason": "**震幅豁免 (大豁免 56%)**: 5 条规则 4/5 通过, 30d 平均震幅 0.44 元 < 1 元 (缺 0.56 元, 缺口 56%)。行业龙头地位 = 一般零售/商业百货细分龙头, 2025 年年报原文: 前身为 1939 年创建的百乐商场, 1966 年 12 月定名上海市第九百货商店, 1994-02-24 上交所上市; 参股的'上海九百城市广场有限公司'及'上海久光百货有限公司''成为静安寺商圈地标性商业百货, 长期以来为公司贡献了较为稳定且丰厚的投资收益和现金流, 已成为公司利润的主要来源'。市值 53.36 亿 (<200) / 股价 13.31 (<50) / 沪主板 600 通过。⚠️ 风险画像: 今日涨停 13.31 = 5 连板 (10/23 三板 -> 10/26 四板 -> 10/27 五板), 30d 位 100% / 90d 位 100% 顶格, 30d 涨 +48.7% / 90d 涨 +72.9%, 90d 涨停 7 次, PE 114.46。2025 全年营收 9564.57 万 (+3.17%) / 归母净利 4533.07 万 (+7.85%) / 扣非 4438.16 万 (+6.10%) —— 利润主要来自参股久光百货的投资收益, 公司无自主经营商场; 年报自述风险: '久光百货市场占有率和盈利能力存在下降风险' + 网购/直播/私域分流。震幅属沉睡型伪指标: 前 8 日逐日振幅仅 0.35~0.51, 近 2 日才起 (0.87 / 1.05), 10/26 一字板振幅 0.00。操作: 入池观察, **不追高**, 等回踩 MA5 (11.10) 以下且缩量"
     }
-  ]
+  ],
+  "stock_count": 16
 }
