@@ -291,9 +291,18 @@ def main():
     ch = chains(m)
     net = sum(s for _, _, s, _ in ch)
     maxabs = sum(abs(s) for _, _, s, _ in ch) or 1
-    # 净信号归一到 -100..+100
-    score = int(round(net / maxabs * 100))
-    if score >= 40:
+    n_active = sum(1 for _, _, s, _ in ch if s != 0)
+    # 2026-10-27 修: 归一化用**固定满量程**, 不用实际 sum(|分|) 当分母。
+    # 旧算法 bug: 8 条链里只有 2 条给分 (+1/+1) -> net=2, sum|分|=2 -> 归一 +100 (满分偏多),
+    # 看起来"极度确信"实际只有 2 条弱信号 -> 10/27 上午 A 股全线跌, 判错。
+    # 满量程 = 各链条理论最大绝对分之和 = 2+2+2+2+1+1+1+1 = 12
+    FULL_SCALE = 12
+    score = int(round(net / FULL_SCALE * 100))
+    # 有效链 < 3 -> 方向无统计意义, 强制降级为中性 + 标注低置信
+    low_conf = n_active < 3
+    if low_conf:
+        bias, bias_emoji = '中性震荡（低置信）', '⚪'
+    elif score >= 40:
         bias, bias_emoji = '偏多', '🟢'
     elif score >= 15:
         bias, bias_emoji = '震荡偏多', '🟡'
