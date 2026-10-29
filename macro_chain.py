@@ -319,7 +319,12 @@ def main():
     L.append(f"# 外围宏观链条审视 - {now.strftime('%Y-%m-%d %H:%M')} (UTC+8)\n")
     L.append(f"> 数据源: Yahoo Finance (美股/美债/美元指数/原油/黄金/VIX/人民币/亚太) + 新浪兜底")
     L.append(f"> 逻辑链: 用户原话 8 条 (美元/美债/美股/油价/黄金跷跷板) 量化落地\n")
-    L.append(f"## 🎯 结论: {bias_emoji} **{bias}** (净信号 {net:+d} / 归一 {score:+d})\n")
+    L.append(f"## 🎯 结论: {bias_emoji} **{bias}** (净信号 {net:+d} / 归一 {score:+d} / 有效链 {n_active}/8)\n")
+    if low_conf:
+        L.append(f"> ⚠️ **低置信**: 8 条链中仅 {n_active} 条给出方向信号 (<3 条), 外围无有效方向判断, "
+                 f"A股按自身逻辑走。净信号 {net:+d} 归一 {score:+d} 已按固定满量程 12 计算 (非满分)。\n")
+    else:
+        L.append(f"> 有效链 {n_active}/8, 净信号 {net:+d}, 归一按固定满量程 12 计算 (非实际 sum|分|)。\n")
     L.append("### 核心链条传导路径\n")
     L.append("```")
     L.append("油价涨 -> 通胀升 -> 美联储加息 -> 美元走强 -> 资金回流美国 -> 新兴市场缺钱")
@@ -346,7 +351,7 @@ def main():
         mark = {2: '🟢强多', 1: '🟡偏多', 0: '⚪中性', -1: '🟠偏空', -2: '🔴强空'}[s]
         L.append(f"| {i} | {name} | {verdict} | {mark} | {why} |")
     L.append("\n### 对 A股的方向含义\n")
-    L.append(f"**大盘倾向: {bias_emoji} {bias}** (净信号 {net:+d}, 归一 {score:+d})\n")
+    L.append(f"**大盘倾向: {bias_emoji} {bias}** (净信号 {net:+d}, 归一 {score:+d}, 有效链 {n_active}/8)\n")
     if up:
         L.append("**受益方向:** " + " / ".join(up))
     if down:
@@ -356,6 +361,7 @@ def main():
     L.append("\n### 使用方式\n")
     L.append("- 这是**外围环境分**, 不是选股结论。开盘后需叠加国内消息面与资金面。")
     L.append("- 净信号 |score| > 40 时, 对A股大盘方向有较强指示; 15~40 为震荡市, 重个股轻指数;")
+    L.append("- **有效链 < 3/8 时一律标注\"低置信\"**, 此时外围无方向, 不作为选股/择时依据;")
     L.append("  |score| < 15 时外围无方向, A股按自身逻辑走。")
     L.append("- 油链条对**板块**的影响是双向的: 油价涨利好石油石化/油服, 同时利空航空/化工/物流。")
     L.append(f"\n**生成**: macro_chain.py @ {now.strftime('%Y-%m-%d %H:%M:%S')}")
