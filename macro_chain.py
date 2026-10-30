@@ -27,6 +27,7 @@ import sys
 import time
 import urllib.request
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 
 CST = timezone(timedelta(hours=8))
 REPO = r"C:\Users\yanyan.zou\stock-collaboration"
@@ -54,13 +55,21 @@ def yf_series(sym, tries=2):
         for _ in range(tries):
             try:
                 u = (f'https://{host}.finance.yahoo.com/v8/finance/chart/'
-                     f'{urllib.request.quote(sym)}?range=3mo&interval=1d')
+                     f'{urllib.parse.quote(sym)}?range=3mo&interval=1d')
                 req = urllib.request.Request(u, headers={'User-Agent': 'Mozilla/5.0'})
                 d = json.loads(urllib.request.urlopen(req, timeout=20).read())
                 r = d['chart']['result'][0]
                 cl = r['indicators']['quote'][0]['close']
                 ts = r['timestamp']
-                rows = [(datetime.fromtimestamp(t, timezone.utc).strftime('%Y-%m-%d'), c)
+                # 2026-10-30 修: 日期必须按**交易所当地时区**算, 不能统一套 UTC。
+                # Yahoo 的日 bar timestamp 用交易所当地午夜表示, 套 UTC 会让
+                # 日经/恒生等亚洲市场整体错位 1 天 (10/30 报告里"日经 63954" 实为 10-27 收盘)。
+                try:
+                    tzname = r['meta'].get('exchangeTimezoneName') or 'UTC'
+                    tz = ZoneInfo(tzname)
+                except Exception:
+                    tz = timezone.utc
+                rows = [(datetime.fromtimestamp(t, tz).strftime('%Y-%m-%d'), c)
                         for t, c in zip(ts, cl) if c is not None]
                 if len(rows) >= 2:
                     return rows
@@ -109,6 +118,65 @@ def fetch_all():
     return out
 
 
+# ---------------- 数据新鲜度 (2026-10-30 加)
+def _lag_days(date_str, ref=None):
+    """bar 日期比"最近已收盘交易日"(默认昨天, 北京时区)落后多少天。>0 = 数据滞后。"""
+    if not date_str:
+        return 0
+    try:
+        d = datetime.strptime(date_str, '%Y-%m-%d').date()
+    except Exception:
+        return 0
+    if ref is None:
+        ref = datetime.now(timezone(timedelta(hours=8))).date() - timedelta(days=1)
+    return (ref - d).days
+
+
+# ---------------- 标签自检 (2026-10-30 加)
+def validate_chain_labels(m, ch):
+    """标签必须与打印出来的数字一致。10/30 事故: 三大指数 3/3 全跌却标'涨跌互现'。
+    本函数在每次生成报告前跑一遍, 不一致直接抛错 —— 这类错不允许再静默出报告。"""
+    g = lambda k, f='d1': m.get(k, {}).get(f, 0.0)
+    d = {name: verdict for name, verdict, _s, _w in ch}
+    errs = []
+
+    if '美股' in d and 'err' not in m.get('spx', {}):
+        legs = (g('spx'), g('ixic'), g('dji'))
+        n_up = sum(1 for x in legs if x > 0)
+        n_dn = sum(1 for x in legs if x < 0)
+        v = d['美股']
+        if v == '涨跌互现' and not (n_up >= 1 and n_dn >= 1):
+            errs.append(f"美股标'涨跌互现'但数字非有涨有跌: {legs}")
+        if v in ('全线小跌', '全线走弱') and n_dn != 3:
+            errs.append(f"美股标'{v}'但并非三腿全跌: {legs}")
+        if v in ('全线小涨', '全线走强') and n_up != 3:
+            errs.append(f"美股标'{v}'但并非三腿全涨: {legs}")
+        if v == '全线持平' and (n_up or n_dn):
+            errs.append(f"美股标'全线持平'但存在涨跌腿: {legs}")
+
+    if '原油' in d and 'err' not in m.get('wti', {}) and 'err' not in m.get('brent', {}):
+        oil = (g('wti') + g('brent')) / 2
+        v = d['原油']
+        if v == '油价上涨' and oil <= 1.5:
+            errs.append(f"原油标'油价上涨'但均值 {oil:+.2f}% 不 > 1.5")
+        if v == '油价下跌' and oil >= -1.5:
+            errs.append(f"原油标'油价下跌'但均值 {oil:+.2f}% 不 < -1.5")
+        if v == '油价平稳' and abs(oil) > 1.5:
+            errs.append(f"原油标'油价平稳'但均值 {oil:+.2f}% 超阈")
+
+    if '亚太' in d and 'err' not in m.get('hsi', {}) and 'err' not in m.get('nikkei', {}):
+        h1, n1 = g('hsi'), g('nikkei')
+        avg = (h1 + n1) / 2
+        v = d['亚太']
+        if v == '亚太走弱' and avg >= -1.5:
+            errs.append(f"亚太标'走弱'但均值 {avg:+.2f}% 不 < -1.5")
+        if v == '亚太走强' and avg <= 1.0:
+            errs.append(f"亚太标'走强'但均值 {avg:+.2f}% 不 > 1.0")
+
+    if errs:
+        raise AssertionError('链条标签与数字不一致:\n  - ' + '\n  - '.join(errs))
+
+
 # ---------------- 链条判定
 def chains(m):
     """8 条链 -> 每条给出 判定 + 对A股方向打分 (-2..+2, 正=利好A股风险偏好)"""
@@ -147,18 +215,28 @@ def chains(m):
         c.append(('美债', '数据缺失', 0, '10Y 美债取数失败'))
 
     # 3 美股 (风险偏好温度计)
+    # 2026-10-30 修: 标签必须与数字一致。原 else 分支把 avg 落在 [-1.0,+0.8] 的所有情况
+    # 都写成"涨跌互现", 导致 3/3 全跌(10/30) 和 3/3 全涨(10/29) 都被误标。
     spx, ixic, dji = g('spx'), g('ixic'), g('dji')
     if has('spx'):
-        avg = (spx + ixic + dji) / 3
-        if avg < -1.0:
-            c.append(('美股', '全线走弱', -2,
-                      f"标普 {spx:+.2f}% / 纳指 {ixic:+.2f}% / 道指 {dji:+.2f}% (均值 {avg:+.2f}%) -> 全球资金避险"))
-        elif avg > 0.8:
-            c.append(('美股', '全线走强', +2,
-                      f"标普 {spx:+.2f}% / 纳指 {ixic:+.2f}% / 道指 {dji:+.2f}% (均值 {avg:+.2f}%) -> 全球风险偏好高"))
+        legs = (spx, ixic, dji)
+        avg = sum(legs) / 3
+        n_up = sum(1 for x in legs if x > 0)
+        n_dn = sum(1 for x in legs if x < 0)
+        detail = (f"标普 {spx:+.2f}% / 纳指 {ixic:+.2f}% / 道指 {dji:+.2f}% "
+                  f"(均值 {avg:+.2f}%, {n_up}涨{n_dn}跌)")
+        if avg < -1.0 and n_dn == 3:
+            c.append(('美股', '全线走弱', -2, detail + " -> 全球资金避险"))
+        elif avg > 1.0 and n_up == 3:
+            c.append(('美股', '全线走强', +2, detail + " -> 全球风险偏好高"))
+        elif n_dn == 3:
+            c.append(('美股', '全线小跌', -1, detail + " -> 三大指数同步下跌, 风险偏好小幅降温"))
+        elif n_up == 3:
+            c.append(('美股', '全线小涨', +1, detail + " -> 三大指数同步上涨, 风险偏好小幅回暖"))
+        elif n_up == 0 and n_dn == 0:
+            c.append(('美股', '全线持平', 0, detail + " -> 三大指数均无变动, 无方向"))
         else:
-            c.append(('美股', '涨跌互现', 0,
-                      f"标普 {spx:+.2f}% / 纳指 {ixic:+.2f}% / 道指 {dji:+.2f}% (均值 {avg:+.2f}%) -> 分化, 无明确方向"))
+            c.append(('美股', '涨跌互现', 0, detail + " -> 涨跌不一, 无明确方向"))
     else:
         c.append(('美股', '数据缺失', 0, '美股指数取数失败'))
 
@@ -180,14 +258,17 @@ def chains(m):
     w1, b1 = g('wti'), g('brent')
     oil = (w1 + b1) / 2
     if has('wti') and has('brent'):
+        # 2026-10-30 修: 两条腿方向背离时必须显式标注, 不能只报均值
+        div = abs(w1 - b1)
+        div_note = f" [WTI/布伦特背离 {div:.2f}pp, 均值口径失真风险]" if div > 1.5 else ""
         if oil > 1.5:
             c.append(('原油', '油价上涨', -1,
                       f"WTI {m['wti']['last']:.2f} ({w1:+.2f}%) / 布伦特 {m['brent']['last']:.2f} ({b1:+.2f}%) "
-                      f"-> 通胀升 -> 加息预期 -> 美元走强 -> 风险资产承压; 但石油石化/油服/煤炭直接受益"))
+                      f"-> 通胀升 -> 加息预期 -> 美元走强 -> 风险资产承压; 但石油石化/油服/煤炭直接受益{div_note}"))
         elif oil < -1.5:
             c.append(('原油', '油价下跌', +1,
                       f"WTI {m['wti']['last']:.2f} ({w1:+.2f}%) / 布伦特 {m['brent']['last']:.2f} ({b1:+.2f}%) "
-                      f"-> 通胀压力缓解, 成本敏感行业(航空/化工/物流/轮胎)受益, 加息预期降温"))
+                      f"-> 通胀压力缓解, 成本敏感行业(航空/化工/物流/轮胎)受益, 加息预期降温{div_note}"))
         else:
             c.append(('原油', '油价平稳', 0,
                       f"WTI {m['wti']['last']:.2f} ({w1:+.2f}%) / 布伦特 {m['brent']['last']:.2f} ({b1:+.2f}%)"))
@@ -235,6 +316,7 @@ def chains(m):
             c.append(('亚太', '中性', 0, f"恒生 {h1:+.2f}% / 日经 {n1:+.2f}%"))
     else:
         c.append(('亚太', '数据缺失', 0, '亚太指数取数失败'))
+    validate_chain_labels(m, c)
     return c
 
 
@@ -332,18 +414,29 @@ def main():
     L.append("美元弱 + 美债弱 + 美股强 => 钱敢往外冲 => A股风险偏好回升")
     L.append("```\n")
     L.append("### 原始数据\n")
-    L.append("| 指标 | 最新 | 日涨跌 | 5日 | 20日 |")
-    L.append("|---|---|---|---|---|")
+    L.append("| 指标 | 数据日期 | 最新 | 日涨跌 | 5日 | 20日 |")
+    L.append("|---|---|---|---|---|---|")
+    stale = []
     order = ['dxy', 'tnx', 'spx', 'ixic', 'dji', 'vix', 'wti', 'brent', 'gold', 'cnh', 'hsi', 'nikkei']
     for k in order:
         d = m.get(k, {})
         if 'err' in d:
-            L.append(f"| {d.get('name', k)} | — | ❌取数失败 | — | — |")
+            L.append(f"| {d.get('name', k)} | — | ❌取数失败 | — | — | — |")
             continue
+        lag = _lag_days(d.get('date', ''))
+        flag = f" ⚠️滞后{lag}天" if lag > 0 else ""
+        if lag < 0:
+            flag = " 盘中"      # bar 日期 = 今天 = 该品种当日未收盘, 数值是实时价
+        if lag > 0:
+            stale.append(f"{d.get('name', k)}({lag}天)")
         pts = ''
         if k == 'tnx':
             pts = f" ({d['d1_pts']*100:+.0f}bp)"
-        L.append(f"| {d['name']} | {d['last']:.3f} | {d['d1']:+.2f}%{pts} | {d['d5']:+.2f}% | {d['d20']:+.2f}% |")
+        L.append(f"| {d['name']} | {d.get('date', '—')}{flag} | {d['last']:.3f} | "
+                 f"{d['d1']:+.2f}%{pts} | {d['d5']:+.2f}% | {d['d20']:+.2f}% |")
+    if stale:
+        L.append("\n> ⚠️ **数据滞后**: " + " / ".join(stale) +
+                 " 的 bar 日期早于最近已收盘交易日, 其涨跌口径可能不是最新隔夜数据, 解读时须扣掉这部分。")
     L.append("\n### 8 条链逐条判定\n")
     L.append("| # | 链条 | 判定 | 信号 | 传导解释 |")
     L.append("|---|---|---|---|---|")
@@ -367,7 +460,9 @@ def main():
     L.append(f"\n**生成**: macro_chain.py @ {now.strftime('%Y-%m-%d %H:%M:%S')}")
 
     md = '\n'.join(L)
-    fn = os.path.join(REPO, f"macro_chain_{now.strftime('%Y%m%d')}.md")
+    # MACRO_OUT 可指定输出文件名 (修正版/回溯用), 默认 macro_chain_YYYYMMDD.md
+    out_name = os.environ.get('MACRO_OUT') or f"macro_chain_{now.strftime('%Y%m%d')}.md"
+    fn = os.path.join(REPO, out_name)
     with open(fn, 'w', encoding='utf-8') as f:
         f.write(md)
 
