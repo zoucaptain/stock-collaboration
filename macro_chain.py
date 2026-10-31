@@ -147,10 +147,15 @@ def validate_chain_labels(m, ch):
         v = d['美股']
         if v == '涨跌互现' and not (n_up >= 1 and n_dn >= 1):
             errs.append(f"美股标'涨跌互现'但数字非有涨有跌: {legs}")
+        _avg = sum(legs) / 3
         if v in ('全线小跌', '全线走弱') and n_dn != 3:
             errs.append(f"美股标'{v}'但并非三腿全跌: {legs}")
         if v in ('全线小涨', '全线走强') and n_up != 3:
             errs.append(f"美股标'{v}'但并非三腿全涨: {legs}")
+        if v == '全线走弱' and not (_avg < -0.8 and n_dn == 3):
+            errs.append(f"美股标'全线走弱'但均值 {_avg:+.2f}% 不 < -0.8 或非全跌: {legs}")
+        if v == '全线走强' and not (_avg > 0.8 and n_up == 3):
+            errs.append(f"美股标'全线走强'但均值 {_avg:+.2f}% 不 > 0.8 或非全涨: {legs}")
         if v == '全线持平' and (n_up or n_dn):
             errs.append(f"美股标'全线持平'但存在涨跌腿: {legs}")
 
@@ -168,8 +173,8 @@ def validate_chain_labels(m, ch):
         h1, n1 = g('hsi'), g('nikkei')
         avg = (h1 + n1) / 2
         v = d['亚太']
-        if v == '亚太走弱' and avg >= -1.5:
-            errs.append(f"亚太标'走弱'但均值 {avg:+.2f}% 不 < -1.5")
+        if v == '亚太走弱' and avg >= -1.0:
+            errs.append(f"亚太标'走弱'但均值 {avg:+.2f}% 不 < -1.0")
         if v == '亚太走强' and avg <= 1.0:
             errs.append(f"亚太标'走强'但均值 {avg:+.2f}% 不 > 1.0")
 
@@ -225,9 +230,9 @@ def chains(m):
         n_dn = sum(1 for x in legs if x < 0)
         detail = (f"标普 {spx:+.2f}% / 纳指 {ixic:+.2f}% / 道指 {dji:+.2f}% "
                   f"(均值 {avg:+.2f}%, {n_up}涨{n_dn}跌)")
-        if avg < -1.0 and n_dn == 3:
+        if avg < -0.8 and n_dn == 3:
             c.append(('美股', '全线走弱', -2, detail + " -> 全球资金避险"))
-        elif avg > 1.0 and n_up == 3:
+        elif avg > 0.8 and n_up == 3:
             c.append(('美股', '全线走强', +2, detail + " -> 全球风险偏好高"))
         elif n_dn == 3:
             c.append(('美股', '全线小跌', -1, detail + " -> 三大指数同步下跌, 风险偏好小幅降温"))
@@ -308,7 +313,7 @@ def chains(m):
     h1, n1 = g('hsi'), g('nikkei')
     if has('hsi') and has('nikkei'):
         avg = (h1 + n1) / 2
-        if avg < -1.5:
+        if avg < -1.0:
             c.append(('亚太', '亚太走弱', -1, f"恒生 {h1:+.2f}% / 日经 {n1:+.2f}% -> 隔夜亚太情绪拖累 A股开盘"))
         elif avg > 1.0:
             c.append(('亚太', '亚太走强', +1, f"恒生 {h1:+.2f}% / 日经 {n1:+.2f}% -> 亚太情绪正面"))
