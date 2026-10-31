@@ -5,6 +5,14 @@
 # 调度: 15:40 (15:30 收盘复盘之后 10 分钟)
 # 流程:
 #   1. source pyenv.sh (持久 venv, Hermes 更新免疫)
+
+# ---- 交易日守卫 (2026-10-31): 周末/法定节假日跳过, 到开市再正常启动 ----
+_TD=$(bash "C:/Users/yanyan.zou/AppData/Local/hermes/scripts/is_trading_day.sh" 2>/dev/null || echo CLOSED)
+if [ "$_TD" != "TRADING" ]; then
+  echo "非交易日 ($(date '+%Y-%m-%d %A')), 本次任务跳过"
+  exit 0
+fi
+
 #   2. 对账上一交易日的预测 (--score) -> 写 accuracy_log.md
 #   3. 出今日预测 (--predict) -> 写 predictions/predict_YYYYMMDD.json
 #   4. git fetch + rebase + add + commit + push (v9.7 协议)
@@ -26,11 +34,11 @@ source "$SCRIPTS/pyenv.sh" 2>/dev/null || true
 
 echo "=== 预测任务 $TS ===" >> "$LOG"
 
-# 1) 对账昨日
-"$PY" "$SCRIPTS/predict_next_day.py" --score >> "$LOG" 2>&1 || echo "[score] 失败 (见 log)" >> "$LOG"
+# 1) 对账昨日 + 检查滚动准确率 (低于70%自动重拟合)
+"$PY" "$SCRIPTS/predict_monitor.py" --score --check >> "$LOG" 2>&1 || echo "[monitor] 失败 (见 log)" >> "$LOG"
 
-# 2) 今日预测
-OUT=$("$PY" "$SCRIPTS/predict_next_day.py" --predict 2>&1)
+# 2) 今日预测 (每日排序 Top3, 100% 覆盖)
+OUT=$("$PY" "$SCRIPTS/predict_v2.py" 2>&1)
 echo "$OUT" >> "$LOG"
 
 # 3) 推 GitHub (v9.7: fetch + rebase + 验证)

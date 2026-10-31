@@ -15,6 +15,14 @@
 set -e
 source "C:/Users/yanyan.zou/AppData/Local/hermes/scripts/pyenv.sh" 2>/dev/null || true
 
+# ---- 交易日守卫 (2026-10-31): 周末/法定节假日跳过, 到开市再正常启动 ----
+_TD=$(bash "C:/Users/yanyan.zou/AppData/Local/hermes/scripts/is_trading_day.sh" 2>/dev/null || echo CLOSED)
+if [ "$_TD" != "TRADING" ]; then
+  echo "非交易日 ($(date '+%Y-%m-%d %A')), 本次任务跳过"
+  exit 0
+fi
+
+
 REPO_DIR="C:/Users/yanyan.zou/stock-collaboration"
 SCRIPT="C:/Users/yanyan.zou/AppData/Local/hermes/scripts/harmonic_warmup_scanner.py"
 ALERT="C:/Users/yanyan.zou/AppData/Local/hermes/scripts/_send_alert.sh"
