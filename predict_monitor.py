@@ -96,13 +96,22 @@ def score_pending():
         with open(os.path.join(PRED_DIR, fn), encoding='utf-8') as f:
             pred = json.load(f)
         done_file = os.path.join(PRED_DIR, fn.replace('.json', '.done'))
-        if os.path.exists(done_file):
+        # 2026-11-02 修: .done 标记原来只按文件名去重, 而文件名 = 基准日。
+        # 缓存冻结导致 10/27~11/2 五天都写同一个 rank_20261026.json -> 第一个 .done 一旦存在,
+        # 后面 5 天全被当成"已结算"跳过 -> 台账里连着 4 条重复预测、却没有对账记录。
+        # 改用 (文件名 + 生成日期) 做键, 保证每次运行都是独立的结算事件。
+        gen = (pred.get('generated') or '')[:10]
+        done_files = [done_file]
+        if gen:
+            done_files.append(os.path.join(
+                PRED_DIR, fn.replace('.json', '') + '_' + gen.replace('-', '') + '.done'))
+        if any(os.path.exists(d) for d in done_files):
             continue
         if fn.startswith('rank_'):
             s = _score_rank(pred, tx_kline)
             if s is not None:
                 settled.append(s)
-                with open(done_file, 'w', encoding='utf-8') as f:
+                with open(done_files[-1], 'w', encoding='utf-8') as f:
                     json.dump({'tp': s['tp'], 'n': s['n']}, f, ensure_ascii=False)
             continue
         if not pred.get('picks'):

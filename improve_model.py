@@ -119,30 +119,79 @@ def _clean_bars(k):
     return out
 
 
-def build():
+def build(force_refresh=False):
+    """取 股票池 K线 + 指数, 带**自动刷新**。
+
+    🚨 2026-11-02 修 (事故): 旧实现是 "缓存文件存在就直接 return", **永不刷新**。
+    后果: .cache/improve_data.json 停留在 2026-10-26 15:50 (里面还是 15 只股票, 数据截至 10/26),
+    于是 10/27 / 10/28 / 10/29 / 10/30 / 11/2 五天的"次日预测"全部用 **10/26 的收盘价**算出来,
+    而且输出文件名 rank_{基准日}.json 每天被覆盖 -> 存档全丢; 新入池的股票 (600838 / 603533)
+    根本不在缓存里, 预测从来没覆盖过它们。
+
+    修法: **缓存只是加速, 不是真相源**。
+      1) 指数永远现取 (2 次调用 ~0.4s), 用它跟缓存比日期 -> 判断缓存是否过期
+      2) 缓存过期 / 池成员有新增 / force_refresh -> 全量重取股票 K线
+      3) 单只取数失败 -> 保留该只的缓存数据 (降级不中断), stderr 标注
+      4) 刷新后写回缓存
+    """
+    cached = None
     if os.path.exists(CACHE):
-        with open(CACHE, encoding='utf-8') as f:
-            b = json.load(f)
-        for code, blob in b['klines'].items():
-            blob['k'] = _clean_bars(blob['k'])
-        return b['klines'], b['index']
+        try:
+            with open(CACHE, encoding='utf-8') as f:
+                cached = json.load(f)
+        except Exception as e:
+            print(f'[build] 缓存读取失败 {e}, 忽略缓存', file=sys.stderr)
+            cached = None
+
     pool = _pool_from_json()
-    print(f'股票池 {len(pool)} 只, 取 {DAYS} 天历史...')
-    klines = {}
-    for code, name in pool:
-        k = _clean_bars(tx_kline_long(code))
-        print(f'  {code} {name}: {len(k)} 根')
-        if len(k) > 200:
-            klines[code] = {'name': name, 'k': k}
-    index = {}
+    pool_map = {c: n for c, n in pool}
+
+    # ---- 1) 指数现取 (便宜), 用来判断缓存过期
+    fresh_index = {}
     for code, tag in (('sh000001', 'sh'), ('sz399006', 'cyb')):
-        k = _clean_bars(tx_index(code))
-        print(f'  指数 {code}: {len(k)} 根')
-        if len(k) > 200:
-            index[tag] = {x['d']: x for x in k}
-    os.makedirs(DURABLE, exist_ok=True)
-    with open(CACHE, 'w', encoding='utf-8') as f:
-        json.dump({'klines': klines, 'index': index}, f)
+        try:
+            k = _clean_bars(tx_index(code))
+            if len(k) > 200:
+                fresh_index[tag] = {x['d']: x for x in k}
+        except Exception as e:
+            print(f'[build] 指数 {code} 取数失败 {e}', file=sys.stderr)
+    fresh_last = max((d for dat in fresh_index.values() for d in dat), default='')
+    cache_last = max((d for dat in (cached or {}).get('index', {}).values() for d in dat), default='')
+
+    klines = dict((cached or {}).get('klines', {}))
+    missing = [c for c in pool_map if c not in klines]
+    stale = fresh_last > cache_last
+    need = force_refresh or cached is None or stale or missing
+
+    if need:
+        why = ('强制刷新' if force_refresh else
+               '缓存缺失' if cached is None else
+               f'缓存过期(缓存 {cache_last} < 现取 {fresh_last})' if stale else
+               f'池成员新增 {missing}' if missing else '未知')
+        print(f'[build] 重新取数: {why} | 股票池 {len(pool)} 只')
+        for code, name in pool:
+            try:
+                k = _clean_bars(tx_kline_long(code))
+                if len(k) > 200:
+                    klines[code] = {'name': name, 'k': k}
+                else:
+                    print(f'  {code} {name}: 只取到 {len(k)} 根, 保留缓存', file=sys.stderr)
+            except Exception as e:
+                print(f'  {code} {name}: 取数失败 {e}, 保留缓存', file=sys.stderr)
+        index = fresh_index or (cached or {}).get('index', {})
+        os.makedirs(DURABLE, exist_ok=True)
+        with open(CACHE, 'w', encoding='utf-8') as f:
+            json.dump({'klines': klines, 'index': index}, f)
+        last = max((x['d'] for b in klines.values() for x in b['k']), default='?')
+        print(f'[build] 完成: {len(klines)} 只股票, 数据截至 {last}, 指数截至 {fresh_last or "?"}')
+        return klines, index
+
+    # ---- 缓存新鲜, 直接用
+    for code, blob in klines.items():
+        blob['k'] = _clean_bars(blob['k'])
+    index = fresh_index or cached.get('index', {})
+    last = max((x['d'] for b in klines.values() for x in b['k']), default='?')
+    print(f'[build] 用缓存: {len(klines)} 只, 数据截至 {last}, 指数截至 {fresh_last or "?"}')
     return klines, index
 
 
@@ -320,7 +369,7 @@ def run(Xs, y, dates, day_idx, n_days, target_label, feature_set, tag, nhr):
 
 def main():
     t0 = time.time()
-    klines, index = build()
+    klines, index = build(force_refresh=True)   # 训练必须用最新数据, 强制刷新缓存
     rows = features_from(klines, index)
     rows = [r for r in rows if r.get('sh_1d') is not None and r.get('cyb_1d') is not None]
     print(f'样本 {len(rows)} 行 | {rows[0]["date"]} ~ {rows[-1]["date"]}')

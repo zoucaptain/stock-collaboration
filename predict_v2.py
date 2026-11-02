@@ -80,6 +80,15 @@ def main():
     os.makedirs(OUTDIR, exist_ok=True)
     fn = os.path.join(OUTDIR, f"rank_{latest_date.replace('-', '')}.json")
     json.dump(out, open(fn, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    # 归档: 同一基准日多次运行不再互相覆盖 (2026-11-02 前 5 天的预测存档就是这样丢的)
+    try:
+        hist = os.path.join(OUTDIR, 'history')
+        os.makedirs(hist, exist_ok=True)
+        stamp = out['generated'][:10].replace('-', '') + '-' + out['generated'][11:16].replace(':', '')
+        json.dump(out, open(os.path.join(hist, f"rank_{latest_date.replace('-', '')}_{stamp}.json"),
+                            'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    except Exception as e:
+        print(f'归档失败: {e}', file=sys.stderr)
 
     # ---- 追加台账
     with open(LOGF, 'a', encoding='utf-8') as f:
