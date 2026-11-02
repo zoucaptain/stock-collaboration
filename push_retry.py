@@ -35,10 +35,14 @@ JOBS = os.path.join(HERMES, 'cron', 'jobs.json')
 STATE = os.path.join(HERMES, 'cron', '.push_retry_state.json')
 CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'push_retry.json')
 MIN_GAP_MIN = 3      # 同一份产物的最短重推间隔
+MAX_CHARS = 1800     # 微信单条上限。适配器 MAX_MESSAGE_LENGTH=2000, 超出会被切成多个 chunk,
+                     # iLink 的 prepare 闸门只放行一次 -> 第 2 个 chunk 必被拒 -> 整个任务判失败。
+                     # 硬约束: 推送内容必须 <=1800 字 (1 chunk)。
+MAX_ATTEMPTS = 8     # 同一条产物最多重推 8 次; 超了跳过, 防止单条永久堵死队列
 
-# 被监控的 job id -> 正文起始标记
+# 被监控的 job id -> 正文起始标记 (必须与 cron 实际输出一致, 否则会回退到 Prompt 段)
 WATCH = [
-    ('post-market-review-20260924', '# 收盘复盘报告'),
+    ('post-market-review-20260924', '📊 A股收盘复盘'),
     ('814228c9d3d4', '📊 股票池预测'),
     ('94dcd757994f', '🌍 外围宏观链条'),
 ]
@@ -101,23 +105,54 @@ def artifacts(job_id):
 
 
 def body_of(path, marker):
+    """取产物正文。
+
+    2026-11-02 修 (根因): cron 产物文件 = "## Prompt" 段(整个 skill 全文, 可达 96K) + "## Response" 段(真正要发的内容)。
+    旧实现找不到 marker 时, 兜底在 **Prompt 段**里找第一个 "# " 行, 从那儿切到文件尾
+    -> 把 96K 的 prompt 连同 506 字的响应一起推给微信 -> 必然被 iLink prepare 闸门拒
+    -> delivery_failed -> 无限重推 -> 队列被单条堵死, 后面所有报告全送不出去。
+
+    修法: **先隔离 ## Response 段**, 只在 Response 段里找 marker; 找不到就用整个 Response 段。
+          并加 MAX_CHARS 硬上限, 超过必截断 (微信单条 <=1800 字 = 1 chunk, 多 chunk 必被 prepare 闸门拒)。
+    """
     try:
         with open(path, encoding='utf-8', errors='replace') as f:
             t = f.read()
     except Exception as e:
         log(f'[push_retry] 产物读取失败 {path}: {e}')
         return None
-    i = t.find(marker)
+
+    # ---- 1) 隔离 Response 段
+    resp = t
+    ri = t.rfind('\n## Response')
+    if ri >= 0:
+        resp = t[ri + len('\n## Response'):]
+    else:
+        ri = t.rfind('\n## Output')
+        if ri >= 0:
+            resp = t[ri + len('\n## Output'):]
+    resp = resp.strip()
+
+    # ---- 2) 在 Response 段里找 marker
+    i = resp.find(marker)
     if i < 0:
-        # 兜底: 去掉 cron 元信息头, 取第一个 '# ' 之后的正文
-        for ln in t.splitlines():
+        for ln in resp.splitlines():
             if ln.startswith('# ') and not ln.startswith('# Cron Job'):
-                i = t.find(ln)
+                i = resp.find(ln)
                 break
-    if i < 0:
+    body = (resp[i:] if i >= 0 else resp).strip()
+    if not body:
         return None
-    b = t[i:].strip()
-    return b or None
+
+    # ---- 3) 硬上限 (微信单条 <=1800 字)
+    if len(body) > MAX_CHARS:
+        keep = body[:MAX_CHARS - 120]
+        cut = keep.rfind('\n')
+        if cut > MAX_CHARS // 2:
+            keep = keep[:cut]
+        body = keep.rstrip() + '\n…(已截断, 全文见 GitHub)'
+        log(f'[push_retry] 正文超长已截断 -> {len(body)} 字')
+    return body
 
 
 def main():
@@ -128,6 +163,7 @@ def main():
 
     st = load_state()
     sent = st['sent']
+    att = st.setdefault('attempts', {})
 
     # ---- 1) 处理上一份的送达结果
     pend = st.get('pending')
@@ -178,14 +214,21 @@ def main():
             log('[push_retry] 距上次推送不足 %d 分钟 — stdout 留空' % MIN_GAP_MIN)
             save_state(st)
             return 0
-        for it in items:
-            if it[4] == key:
-                chosen = it
-                break
-        if chosen is None:
-            log(f'[push_retry] 待重推的 {key} 已不在待推列表 (可能已送达), stdout 留空')
-            save_state(st)
-            return 0
+        # 重推次数超限 -> 跳过这条, 让后面的能出去 (防止单条永久堵死队列)
+        if int(att.get(key, 0)) >= MAX_ATTEMPTS:
+            log(f'[push_retry] {key} 已重推 {att[key]} 次超上限, 跳过 (不再堵队列)')
+            sent[key] = datetime.now().isoformat(timespec='seconds') + ' (skipped: 超过最大重推次数)'
+            st['pending'] = None
+            pend = None
+        else:
+            for it in items:
+                if it[4] == key:
+                    chosen = it
+                    break
+            if chosen is None:
+                log(f'[push_retry] 待重推的 {key} 已不在待推列表 (可能已送达), stdout 留空')
+                save_state(st)
+                return 0
     if chosen is None and items:
         chosen = items[0]
 
@@ -203,11 +246,12 @@ def main():
 
     st['pending'] = {'key': key, 'job': jid,
                      'at': datetime.now().isoformat(timespec='seconds')}
+    att[key] = int(att.get(key, 0)) + 1
     save_state(st)
 
     sys.stdout.write(body)
     sys.stdout.flush()
-    log(f'[push_retry] 输出正文 ({len(body)} 字) from {jid}/{os.path.basename(path)} '
+    log(f'[push_retry] 输出正文 ({len(body)} 字, 第{att[key]}次) from {jid}/{os.path.basename(path)} '
         f'| 推送器状态: {pusher_status or "(未知)"}')
     return 0
 
