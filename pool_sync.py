@@ -22,28 +22,20 @@ from predict_next_day import tx_kline
 REPO = r'C:\Users\yanyan.zou\stock-collaboration'
 POOL_JSON = os.path.join(REPO, 'pool.json')
 POOL_MD = os.path.join(REPO, 'pool.md')
-STAMP = '10/27 午间实测'
+STAMP = datetime.now().strftime('%m/%d %H:%M 实测')
 
-NEW = {
-    "code": "600838", "name": "上海九百", "industry": "一般零售+静安寺商圈",
-    "added_at": "2026-10-27", "added_by": "user_manual_add",
-    "is_industry_leader": True,
-    "is_exception": True,
-    "exception_reason": (
-        "**震幅豁免 (大豁免 56%)**: 5 条规则 4/5 通过, 30d 平均震幅 0.44 元 < 1 元 (缺 0.56 元, 缺口 56%)。"
-        "行业龙头地位 = 一般零售/商业百货细分龙头, 2025 年年报原文: 前身为 1939 年创建的百乐商场, "
-        "1966 年 12 月定名上海市第九百货商店, 1994-02-24 上交所上市; 参股的'上海九百城市广场有限公司'及"
-        "'上海久光百货有限公司''成为静安寺商圈地标性商业百货, 长期以来为公司贡献了较为稳定且丰厚的投资收益和现金流, "
-        "已成为公司利润的主要来源'。"
-        "市值 53.36 亿 (<200) / 股价 13.31 (<50) / 沪主板 600 通过。"
-        "⚠️ 风险画像: 今日涨停 13.31 = 5 连板 (10/23 三板 -> 10/26 四板 -> 10/27 五板), "
-        "30d 位 100% / 90d 位 100% 顶格, 30d 涨 +48.7% / 90d 涨 +72.9%, 90d 涨停 7 次, PE 114.46。"
-        "2025 全年营收 9564.57 万 (+3.17%) / 归母净利 4533.07 万 (+7.85%) / 扣非 4438.16 万 (+6.10%) —— "
-        "利润主要来自参股久光百货的投资收益, 公司无自主经营商场; 年报自述风险: "
-        "'久光百货市场占有率和盈利能力存在下降风险' + 网购/直播/私域分流。"
-        "震幅属沉睡型伪指标: 前 8 日逐日振幅仅 0.35~0.51, 近 2 日才起 (0.87 / 1.05), 10/26 一字板振幅 0.00。"
-        "操作: 入池观察, **不追高**, 等回踩 MA5 (11.10) 以下且缩量")
-}
+# 待加股票清单: 仓库内 pool_additions.json (list) —— 以后加票只改这个文件, 不用改脚本
+ADDITIONS_FILE = os.path.join(REPO, 'pool_additions.json')
+
+
+def load_additions():
+    try:
+        with open(ADDITIONS_FILE, encoding='utf-8') as f:
+            d = json.load(f)
+        return d if isinstance(d, list) else []
+    except Exception as e:
+        print(f'[pool_sync] 加票清单读取失败: {e}')
+        return []
 
 
 def realtime(code):
@@ -221,6 +213,12 @@ def gen_md(rows, stocks):
             A(f"- **{s['name']}**: {s['exception_note']}")
         elif s.get('note'):
             A(f"- **{s['name']}**: {s['note']}")
+        if s.get('leader_evidence'):
+            A(f"  - **龙头地位依据 ({s['name']})**: {s['leader_evidence']}")
+        if s.get('entry_note'):
+            A(f"  - **入池状态 ({s['name']})**: {s['entry_note']}")
+        if s.get('risk_note'):
+            A(f"  - **风险画像 ({s['name']})**: {s['risk_note']}")
     A('\n---\n')
     A(f'## 📊 每日状态 ({STAMP})\n')
     A('| 名称 | 现价 | 涨% | 30d位 | 30d涨跌 | 涨停30d | 趋势 | K线 | 均线 | 筹码 | 状态 |')
@@ -327,7 +325,7 @@ def gen_md(rows, stocks):
     lowdeep = [r for r in rows if r['pos90'] < 40 and r['c30'] < -20]
     midk = [r for r in rows if 20 <= r['pos90'] < 60]
     highk = [r for r in rows if r['pos90'] >= 60]
-    top = [r for r in rows if r['pos30'] > 90]
+    top = [r for r in rows if r['pos30'] > 90 or r['chg'] >= 9.8]
     if bottom:
         bs = ', '.join('{} ({:.0f}%)'.format(r['name'], r['pos90']) for r in sorted(bottom, key=lambda x: x['pos90']))
         A(f'| 💎 **底部 (<20%)** | {bs} | 🥇 **重点关注低吸** |')
@@ -352,8 +350,15 @@ def gen_md(rows, stocks):
 def main():
     pj = json.load(open(POOL_JSON, encoding='utf-8'))
     stocks = pj['stocks']
-    if not any(s['code'] == NEW['code'] for s in stocks):
-        stocks.append(NEW)
+    added = []
+    for new in load_additions():
+        if any(s['code'] == new['code'] for s in stocks):
+            print(f"  {new['name']} ({new['code']}) 已在池中, 跳过")
+            continue
+        stocks.append(new)
+        added.append(f"{new['name']}({new['code']})")
+    if added:
+        print(f'  新加入池: {" / ".join(added)}')
     pj['updated_at'] = datetime.now().strftime('%Y-%m-%d %H:%M')
     pj['stock_count'] = len(stocks)
 
